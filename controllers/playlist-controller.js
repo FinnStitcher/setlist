@@ -133,12 +133,25 @@ const playlistController = {
                 return;
             }
 
+            // update dateLastModified
+            return Playlist.findOneAndUpdate(
+                {_id: playlistId},
+                {dateLastModified: Date.now()},
+                {new: true}
+            );
+        })
+        .then(dbRes => {
+            if (!dbRes) {
+                res.status(500).json({message: 'Something went wrong.'});
+                return;
+            }
+
             res.json(dbRes);
         })
         .catch(err => {
             console.log(err);
             res.status(500).json(err);
-        })
+        });
     },
 
     async removeSongFromPlaylist(req, res) {
@@ -154,18 +167,31 @@ const playlistController = {
 			{ $pull: { songs: { $in: songId } } },
 			{ new: true }
 		)
-			.then(dbRes => {
-				if (!dbRes) {
-					res.status(404).json({ message: 'Playlist not found.' });
-					return;
-				}
+        .then(dbRes => {
+            if (!dbRes) {
+                res.status(404).json({ message: 'Playlist not found.' });
+                return;
+            }
 
-				res.json(dbRes);
-			})
-			.catch(err => {
-				console.log(err);
-				res.status(500).json(err);
-			});
+            // update dateLastModified
+            return Playlist.findOneAndUpdate(
+                {_id: playlistId},
+                {dateLastModified: Date.now()},
+                {new: true}
+            );
+        })
+        .then(dbRes => {
+            if (!dbRes) {
+                res.status(500).json({message: 'Something went wrong.'});
+                return;
+            }
+
+            res.json(dbRes);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
     }
 };
 
