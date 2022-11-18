@@ -1,10 +1,10 @@
-const {Song} = require('../models');
+const {User} = require('../models');
 
-const songController = {
-    getAllSongs(req, res) {
-        console.log('getAllSongs');
+const userController = {
+    getAllUsers(req, res) {
+        console.log('getAllUsers');
 
-        Song.find({})
+        User.find({})
         .select('-__v')
         .then(dbRes => res.json(dbRes))
         .catch(err => {
@@ -12,16 +12,16 @@ const songController = {
             res.status(500).json(err);
         });
     },
-    
-    getOneSong(req, res) {
-        console.log('getOneSong');
+
+    getOneUser(req, res) {
+        console.log('getOneUser');
 
         const searchTerm = req.params.id;
 
-        Song.findOne({
+        User.findOne({
             _id: searchTerm
         })
-        .select('-__v')
+        .populate('playlists')
         .then(dbRes => res.json(dbRes))
         .catch(err => {
             console.log(err);
@@ -29,18 +29,21 @@ const songController = {
         });
     },
 
-    postSong(req, res) {
-        console.log('postSong');
+    postUser(req, res) {
+        console.log('postUser');
 
         const {body} = req;
 
-        Song.create(body)
+        User.create(body)
         .then(dbRes => res.json(dbRes))
         .catch(err => {
             console.log(err);
             res.status(400).json(err);
         });
+
+        // no login/logout right now
+        // will automatically login user on user creation
     }
 };
 
-module.exports = songController;
+module.exports = userController;

@@ -23,7 +23,8 @@ const PlaylistSchema = new Schema(
         }],
         username: {
             type: String,
-            ref: 'User'
+            ref: 'User',
+            required: true
         }
     },
     {
