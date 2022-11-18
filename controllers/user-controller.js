@@ -21,7 +21,10 @@ const userController = {
         User.findOne({
             _id: searchTerm
         })
-        .populate('playlists')
+        .populate({
+            path: 'playlists',
+            select: '-__v -username'
+        })
         .then(dbRes => res.json(dbRes))
         .catch(err => {
             console.log(err);

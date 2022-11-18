@@ -1,4 +1,4 @@
-const {Playlist, User} = require('../models');
+const {Playlist, User, Song} = require('../models');
 
 const playlistController = {
     getAllPlaylists(req, res) {
@@ -19,6 +19,10 @@ const playlistController = {
 
         Playlist.findOne({
             _id: searchTerm
+        })
+        .populate({
+            path: 'songs',
+            select: '-__v'
         })
         .then(dbRes => res.json(dbRes))
         .catch(err => {
@@ -74,6 +78,7 @@ const playlistController = {
             // check that a playlist was found
             if (!dbRes) {
                 res.status(404).json({message: 'No playlist with that ID.'});
+                return;
             }
 
             // destructure out relevant data
@@ -88,6 +93,7 @@ const playlistController = {
         .then(dbRes => {
             if (!dbRes) {
                 res.status(400).json({message: 'Playlist deleted, but user could not be found.'});
+                return;
             }
 
             res.json(dbRes);
@@ -96,6 +102,70 @@ const playlistController = {
             console.log(err);
             res.status(500).json(err);
         })
+    },
+
+    async addSongToPlaylist(req, res) {
+        console.log('addSongToPlaylist');
+
+        // destructure out values
+        const playlistId = req.params.id;
+        const {songId} = req.body;
+
+        // check that songId is valid
+        const songExists = await Song.findOne({
+            _id: songId
+        });
+
+        if (!songExists) {
+            res.status(400).json({message: 'No song with this ID.'});
+            return;
+        }
+
+        // works with single elements or arrays
+        Playlist.findOneAndUpdate(
+            {_id: playlistId},
+            {$addToSet: {songs: songId}},
+            {new: true}
+        )
+        .then(dbRes => {
+            if (!dbRes) {
+                res.status(404).json({message: 'Playlist not found.'});
+                return;
+            }
+
+            res.json(dbRes);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        })
+    },
+
+    async removeSongFromPlaylist(req, res) {
+        console.log('removeSongFromPlaylist');
+
+        // destructure out values
+        const playlistId = req.params.id;
+        const {songId} = req.body;
+
+        // works with single elements or arrays
+        Playlist.findOneAndUpdate(
+			{ _id: playlistId },
+			{ $pull: { songs: { $in: songId } } },
+			{ new: true }
+		)
+			.then(dbRes => {
+				if (!dbRes) {
+					res.status(404).json({ message: 'Playlist not found.' });
+					return;
+				}
+
+				res.json(dbRes);
+			})
+			.catch(err => {
+				console.log(err);
+				res.status(500).json(err);
+			});
     }
 };
 
