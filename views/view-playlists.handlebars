@@ -1,7 +1,5 @@
 <h2 class="text-xl mb-4 border-b-2 border-stone-300">Your Playlists</h2>
 
-{{> playlist}}
-
-{{> playlist}}
-
-{{> playlist}}
+{{#each data.playlists as |pl|}}
+    {{> playlist pl}}
+{{/each}}

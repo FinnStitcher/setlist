@@ -1,12 +1,12 @@
 <section class="border-2 border-stone-300 mb-3">
     <div class="bg-stone-300 p-1.5 flex justify-between sm:justify-start">
-        <h3>Playlist Name</h3>
+        <h3>{{this.title}}</h3>
         <p class="ml-2 md:ml-4">▼</p>
     </div>
 
     <ul class="pl-3 py-2.5">
-        {{> song}}
-        {{> song}}
-        {{> song}}
+        {{#each this.songs as |song|}}
+            {{> song song}}
+        {{/each}}
     </ul>
 </section>
