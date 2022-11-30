@@ -1,5 +1,9 @@
 <h2 class="text-xl mb-4 border-b-2 border-stone-300">Your Playlists</h2>
 
-{{#each data.playlists as |pl|}}
-    {{> playlist pl}}
-{{/each}}
+<div id="playlist-container">
+    {{#each data.playlists as |pl|}}
+        {{> playlist pl}}
+    {{/each}}    
+</div>
+
+<script src="/js/toggle-playlist.js"></script>

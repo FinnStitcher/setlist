@@ -1,10 +1,11 @@
 <section class="border-2 border-stone-300 mb-3">
-    <div class="bg-stone-300 p-1.5 flex justify-between sm:justify-start">
+    <div class="bg-stone-300 p-1.5 flex justify-between sm:justify-start pl-title">
         <h3>{{this.title}}</h3>
         <p class="ml-2 md:ml-4">▼</p>
     </div>
 
-    <ul class="pl-3 py-2.5">
+    {{!-- this will display with the classes 'pl-3 py-2.5 divide-y space-y-1.5 block' --}}
+    <ul class="hidden">
         {{#each this.songs as |song|}}
             {{> song song}}
         {{/each}}

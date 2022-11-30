@@ -2,7 +2,8 @@
 
 module.exports = {
   content: [
-    './views/**/*.handlebars'
+    './views/**/*.handlebars',
+    './src/js/*.js'
   ],
 //   theme: {
 //     extend: {},
