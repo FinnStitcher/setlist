@@ -29,6 +29,25 @@ const songController = {
         });
     },
 
+    searchSongs(req, res) {
+        console.log('searchSongs');
+
+        const searchTerm = req.params.search;
+        // convert searchTerm into a regexp
+        const searchRegex = new RegExp(searchTerm, 'i');
+        
+        Song.find({
+            title: searchRegex
+        })
+        .lean()
+        .select('title artist _id')
+        .then(dbRes => res.json(dbRes))
+        .catch(err => {
+            console.log(err);
+            res.status(404).json(err);
+        });
+    },
+
     postSong(req, res) {
         console.log('postSong');
 

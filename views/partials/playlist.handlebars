@@ -4,8 +4,6 @@
         <p class="ml-2 md:ml-4">▼</p>
     </div>
     
-    
-
     <div class="hidden">
         <div class="border-t-2 border-stone-400">
             <a role="button" href="/playlists/edit/{{this._id}}" class="inline-block w-36 bg-stone-300 p-2">Edit</a>
@@ -14,9 +12,9 @@
         </div>
 
         <ul class="pl-3 py-2.5 divide-y space-y-1.5">
-        {{#each this.songs as |song|}}
-            {{> song song}}
-        {{/each}}
-    </ul>
+            {{#each this.songs as |song|}}
+                {{> song song}}
+            {{/each}}
+        </ul>
     </div>
 </section>

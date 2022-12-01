@@ -1,0 +1,26 @@
+<div class="mb-4">
+    <h2 class="text-xl mb-1 border-b-2 border-stone-300">Create Playlist</h2>
+</div>
+
+<form>
+    <div>
+        <label for="playlist-name">Title</label>
+        <input id="playlist-name" name="playlist-name">
+    </div>
+
+    <div>
+        <label for="song-search">Search for songs:</label>
+        <input id="song-search" name="song-search">
+
+        <p>when the input updates, an api will be called to locate songs in the database</p>
+        <p>if it runs like ass i'll fiddle with it and get a submit button going on</p>
+
+        <ul class="bg-stone-100 pl-3 py-2.5 divide-y space-y-1.5" id="song-container">
+            {{!-- songs will print out in here --}}
+        </ul>
+    </div>
+
+    <button type="submit">Submit</button>
+</form>
+
+<script src="/js/search-songs.js"></script>

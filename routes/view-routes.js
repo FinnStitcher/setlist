@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {User} = require('../models');
+const {User, Playlist, Song} = require('../models');
 
 router.get('/playlists', async (req, res) => {
     // get this user's data, incl playlists
@@ -17,7 +17,30 @@ router.get('/playlists', async (req, res) => {
     .then(dbRes => dbRes)
     .catch(err => err);
 
-    res.render('view-playlists', {data: userData});
+    res.render('view-playlists', {userData});
+});
+
+router.get('/playlists/new', async (req, res) => {
+    const songData = await Song.find()
+    .lean()
+    .then(dbRes => dbRes)
+    .catch(err => err);
+
+    res.render('create-playlist', {songData});
+});
+
+router.get('/playlists/edit/:id', async (req, res) => {
+    // get info for this playlist
+    const playlistData = await Playlist.findOne({_id: req.params.id})
+    .lean()
+    .select('-__v -username')
+    .populate({
+        path: 'songs'
+    })
+    .then(dbRes => dbRes)
+    .catch(err => err);
+
+    res.render('edit-playlist', {playlistData});
 });
 
 module.exports = router;
