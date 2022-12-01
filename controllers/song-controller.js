@@ -34,7 +34,8 @@ const songController = {
 
         const searchTerm = req.params.search;
         // convert searchTerm into a regexp
-        const searchRegex = new RegExp(searchTerm, 'i');
+        // requires a word boundary at the start of the search term
+        const searchRegex = new RegExp('\\b' + searchTerm, 'i');
         
         Song.find({
             title: searchRegex
