@@ -2,20 +2,30 @@
     <h2 class="text-xl mb-1 border-b-2 border-stone-300">Create Playlist</h2>
 </div>
 
-<form>
+<form id="playlist-form">
     <div>
         <label for="playlist-name">Title</label>
         <input id="playlist-name" name="playlist-name">
     </div>
 
+    <hr>
+
     <div>
-        <label for="song-search">Search for songs:</label>
+        <label>Songs</label>
+
+        <ul class="bg-stone-100 pl-3 py-2.5 divide-y space-y-1.5" id="selected-songs">
+            {{!-- selected songs will be printed here --}}
+        </ul>
+
+        <label for="song-search">Search:</label>
         <input id="song-search" name="song-search">
 
         <ul class="bg-stone-100 pl-3 py-2.5 divide-y space-y-1.5" id="song-container">
             {{!-- songs will print out in here --}}
         </ul>
     </div>
+
+    <hr>
 
     <button type="submit">Submit</button>
 </form>
