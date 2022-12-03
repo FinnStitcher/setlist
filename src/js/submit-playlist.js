@@ -26,16 +26,15 @@ async function formSubmitHandler(event) {
 	};
 
 	// send fetch req to server
-	const response = await fetch('/api/playlists', {
+	fetch('/api/playlists', {
 		method: 'POST',
 		headers: {
 			Accept: 'application/json',
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify(playlistObj)
-	}).then(dbRes => dbRes.json());
-
-	console.log(response);
+	});
+    // no .then block because we aren't doing anything with the response yet
 }
 
 formEl.addEventListener('submit', formSubmitHandler);

@@ -5,8 +5,12 @@ module.exports = {
     './views/**/*.handlebars',
     './src/js/*.js'
   ],
-//   theme: {
-//     extend: {},
-//   },
-//   plugins: []
+  theme: {
+    extend: {
+        minHeight: {
+            '12': '3rem'
+        }
+    },
+  },
+  plugins: []
 };
