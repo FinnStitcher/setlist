@@ -2,33 +2,7 @@
     <h2 class="text-xl mb-1 border-b-2 border-stone-300">Create Playlist</h2>
 </div>
 
-<form id="playlist-form">
-    <div>
-        <label for="playlist-name" class="block text-lg mb-0.5">Title</label>
-        <input id="playlist-name" name="playlist-name" class="block w-full md:w-96 border border-amber-600/50">
-    </div>
-
-    <hr class="my-4 border-stone-400">
-
-    <div>
-        <label class="block text-lg mb-0.5">Songs</label>
-
-        <ul class="bg-stone-200 pl-3 py-2.5 divide-y space-y-1.5 min-h-12 mb-2 lg:w-3/5" id="selected-songs">
-            {{!-- selected songs will be printed here --}}
-        </ul>
-
-        <label for="song-search" class="block mb-0.5">Search:</label>
-        <input id="song-search" name="song-search" class="block w-full md:w-96 border border-amber-600/50">
-
-        <ul class="bg-stone-200 pl-3 py-2.5 divide-y space-y-1.5 min-h-12 lg:w-3/5" id="song-container">
-            {{!-- songs will print out in here --}}
-        </ul>
-    </div>
-
-    <hr class="my-4 border-stone-400">
-
-    <button type="submit" class="block w-48 bg-stone-300 p-2">Submit</button>
-</form>
+{{> playlist-form}}
 
 <script src="/js/search-songs.js"></script>
 <script src="/js/submit-playlist.js"></script>

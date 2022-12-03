@@ -14,19 +14,37 @@ songContainerEl.addEventListener('dblclick', songSelectHandler);
 // double-clicking a selected song will remove it from that list
 selectionContainerEl.addEventListener('dblclick', songDeselectHandler);
 
+// initial check - are there songs in the selectionContainerEl?
+function checkIfEditMode() {
+    if (selectionContainerEl.children) {
+        // select all children of selectionContainerEl
+        const selectedSongEls = document.querySelectorAll('#selected-songs li');
+
+        // store selected song ids
+        // this ensures correct functionality if you're editing an existing playlist
+        selectedSongEls.forEach(element => {
+            const id = element.getAttribute('data-id');
+            selectedSongIds.push(id);
+        });
+    }
+};
+
+checkIfEditMode();
+
 function songSearchInputHandler(event) {
     const {value} = event.target;
 
     // regexp that excludes whitespace
-    const notWhitespaceRegex = /\S/
+    const notWhitespaceRegex = /\S/;
     
     // make sure there's actually text in the search bar
     if (value && notWhitespaceRegex.test(value)) {
-        searchSongs(value);
+        searchSongs();
     }
 };
 
-async function searchSongs(value) {
+async function searchSongs() {
+    const {value} = songSearchInputEl;
     // get songs matching input from db
     const songs = await fetch('/api/songs/search/' + value).then(dbRes => dbRes.json());
 
@@ -40,6 +58,7 @@ async function searchSongs(value) {
     }
 
     songs.forEach(element => printSong(element));
+    // need to do some kind of extra processing to not print songs that are already in this playlist
 };
 
 function printSong(element) {
@@ -82,9 +101,15 @@ function songSelectHandler(event) {
 function songDeselectHandler(event) {
     const {target} = event;
     
-    const isLi = target.matches('li');
+    const isLi = target.matches('li') || target.matches('li p');
 
     if (isLi) {
-        songContainerEl.appendChild(target);
+        songContainerEl.appendChild(target.closest('li'));
+        
+        // does not give desired behavior
+        // desired behavior:
+        // - if song could appear in current search, it moves down to that box
+        // - if it could not appear in current search, it disappears
+        // - if it already appears in current search, it disappears
     }
 };

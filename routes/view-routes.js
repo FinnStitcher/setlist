@@ -40,6 +40,8 @@ router.get('/playlists/edit/:id', async (req, res) => {
     .then(dbRes => dbRes)
     .catch(err => err);
 
+    console.log(playlistData);
+
     res.render('edit-playlist', {playlistData});
 });
 
