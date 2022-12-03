@@ -2,8 +2,8 @@ const songContainerEl = document.getElementById('song-container');
 const songSearchInputEl = document.getElementById('song-search');
 const selectionContainerEl = document.getElementById('selected-songs');
 
-// used to check for duplicates
-const selectedSongs = [];
+// used in songSelectHandler to check for duplicates
+const selectedSongIds = [];
 
 // lets the user make searches
 songSearchInputEl.addEventListener('keyup', songSearchInputHandler);
@@ -68,12 +68,12 @@ function songSelectHandler(event) {
         // make sure there isn't an element in selectionContainerEl with this data-id property
         const targetId = target.getAttribute('data-id');
 
-        if (selectedSongs.indexOf(targetId) !== -1) {
+        if (selectedSongIds.indexOf(targetId) !== -1) {
             target.remove();
             return;
         }
 
-        selectedSongs.push(targetId);
+        selectedSongIds.push(targetId);
         // make a clone of this element in selectionContainerEl
         selectionContainerEl.appendChild(target);
     }
