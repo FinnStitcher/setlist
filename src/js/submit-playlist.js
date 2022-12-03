@@ -26,7 +26,7 @@ async function formSubmitHandler(event) {
 	};
 
 	// send fetch req to server
-	fetch('/api/playlists', {
+	const response = await fetch('/api/playlists', {
 		method: 'POST',
 		headers: {
 			Accept: 'application/json',
@@ -34,7 +34,11 @@ async function formSubmitHandler(event) {
 		},
 		body: JSON.stringify(playlistObj)
 	});
-    // no .then block because we aren't doing anything with the response yet
+    
+    if (response.ok) {
+        // TODO: confirm submit and redirect
+        window.location.assign('/playlists');
+    }
 }
 
 formEl.addEventListener('submit', formSubmitHandler);

@@ -18,6 +18,7 @@ async function deleteButtonHandler(event) {
         });
 
         if (response.ok) {
+            // TODO: display successful delete popup
             // refresh page
             window.location.reload();
         }
