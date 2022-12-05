@@ -43,4 +43,8 @@ router.get('/playlists/edit/:id', async (req, res) => {
     res.render('edit-playlist', {playlistData});
 });
 
+router.get('/songs', (req, res) => {
+    res.render('create-song');
+});
+
 module.exports = router;

@@ -49,6 +49,30 @@ const songController = {
         });
     },
 
+    matchSongs(req, res) {
+        console.log('matchSongs');
+
+        // runs on the submit a song page
+        // returns songs that the user might be typing in a duplicate of
+
+        // turn query params into regexps
+        const titleRegex = req.query.title ? new RegExp('\\b' + req.query.title, 'i') : new RegExp('.');
+        const artistRegex = req.query.artist ? new RegExp('\\b' + req.query.artist, 'i') : new RegExp('.');
+
+        Song.find({
+            $and: [
+                {title: titleRegex},
+                {artist: artistRegex}
+            ]
+        })
+        .lean()
+        .then(dbRes => res.json(dbRes))
+        .catch(err => {
+            console.log(err);
+            res.status(404).json(err);
+        });
+    },
+
     postSong(req, res) {
         console.log('postSong');
 
