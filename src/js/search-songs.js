@@ -1,5 +1,5 @@
-const songContainerEl = document.getElementById('song-container');
 const songSearchInputEl = document.getElementById('song-search');
+const searchResultsContainerEl = document.getElementById('song-search-results');
 const selectionContainerEl = document.getElementById('selected-songs');
 
 // used in songSelectHandler to check for duplicates
@@ -9,7 +9,7 @@ const selectedSongIds = [];
 songSearchInputEl.addEventListener('keyup', songSearchInputHandler);
 
 // double-clicking a song will add it to the selection list
-songContainerEl.addEventListener('dblclick', songSelectHandler);
+searchResultsContainerEl.addEventListener('dblclick', songSelectHandler);
 
 // double-clicking a selected song will remove it from that list
 selectionContainerEl.addEventListener('dblclick', songDeselectHandler);
@@ -26,6 +26,8 @@ function checkIfEditMode() {
             const id = element.getAttribute('data-id');
             selectedSongIds.push(id);
         });
+
+        console.log(selectedSongIds);
     }
 };
 
@@ -40,6 +42,11 @@ function songSearchInputHandler(event) {
     // make sure there's actually text in the search bar
     if (value && notWhitespaceRegex.test(value)) {
         searchSongs();
+        return;
+    }
+
+    if (!value) {
+        searchResultsContainerEl.innerHTML = '';
     }
 };
 
@@ -49,7 +56,7 @@ async function searchSongs() {
     const songs = await fetch('/api/songs/search/' + value).then(dbRes => dbRes.json());
 
     // wipe song container
-    songContainerEl.innerHTML = '';
+    searchResultsContainerEl.innerHTML = '';
 
     // if no songs were returned, print message
     if (!songs[0]) {
@@ -68,14 +75,14 @@ function printSong(element) {
     songEl.textContent = `${title} - ${artist}`;
     songEl.setAttribute('data-id', _id);
 
-    songContainerEl.appendChild(songEl);
+    searchResultsContainerEl.appendChild(songEl);
 };
 
 function printNoResultsMessage() {
     const messageEl = document.createElement('p');
     messageEl.textContent = 'No songs matching your search were found.';
 
-    songContainerEl.appendChild(messageEl);
+    searchResultsContainerEl.appendChild(messageEl);
 };
 
 function songSelectHandler(event) {
@@ -84,16 +91,18 @@ function songSelectHandler(event) {
     const isLi = target.matches('li');
 
     if (isLi) {
-        // make sure there isn't an element in selectionContainerEl with this data-id property
+        // check if there's a match in selectedSongIds
         const targetId = target.getAttribute('data-id');
+        const isAlreadySelected = selectedSongIds.indexOf(targetId) !== -1;
 
-        if (selectedSongIds.indexOf(targetId) !== -1) {
+        if (isAlreadySelected) {
             target.remove();
             return;
         }
 
+        // else, add it to the selection
         selectedSongIds.push(targetId);
-        // make a clone of this element in selectionContainerEl
+        console.log(selectedSongIds);
         selectionContainerEl.appendChild(target);
     }
 };
@@ -101,15 +110,34 @@ function songSelectHandler(event) {
 function songDeselectHandler(event) {
     const {target} = event;
     
-    const isLi = target.matches('li') || target.matches('li p');
+    const isLi = target.matches('li');
 
     if (isLi) {
-        songContainerEl.appendChild(target.closest('li'));
-        
-        // does not give desired behavior
-        // desired behavior:
-        // - if song could appear in current search, it moves down to that box
-        // - if it could not appear in current search, it disappears
-        // - if it already appears in current search, it disappears
+        // code to avoid having duplicates in the search results box
+        const searchTerm = songSearchInputEl.value;
+        const searchRegex = new RegExp('\\b' + searchTerm, 'i');
+
+        const songTitle = target.textContent.split(' - ')[0].trim();
+        const songId = target.getAttribute('data-id');
+
+        // check if this song can appear in the current search
+        if (searchTerm && searchRegex.test(songTitle)) {
+            // check if it *does* appear in the current search
+            const isInSearchResults = !!document.querySelector(`#song-search-results [data-id="${songId}"]`);
+
+            if (isInSearchResults) {
+                target.remove();
+            } else {
+                searchResultsContainerEl.appendChild(target);
+            }
+        } else {
+            // song cannot appear in current search
+            target.remove();
+        }
+
+        // remove from selected id array
+        const indexOfRemoved = selectedSongIds.indexOf(songId);
+        selectedSongIds.splice(indexOfRemoved, 1);
+        console.log(selectedSongIds);
     }
 };
