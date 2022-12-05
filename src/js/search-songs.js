@@ -26,8 +26,6 @@ function checkIfEditMode() {
             const id = element.getAttribute('data-id');
             selectedSongIds.push(id);
         });
-
-        console.log(selectedSongIds);
     }
 };
 
@@ -102,7 +100,6 @@ function songSelectHandler(event) {
 
         // else, add it to the selection
         selectedSongIds.push(targetId);
-        console.log(selectedSongIds);
         selectionContainerEl.appendChild(target);
     }
 };
@@ -138,6 +135,5 @@ function songDeselectHandler(event) {
         // remove from selected id array
         const indexOfRemoved = selectedSongIds.indexOf(songId);
         selectedSongIds.splice(indexOfRemoved, 1);
-        console.log(selectedSongIds);
     }
 };

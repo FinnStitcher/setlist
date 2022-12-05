@@ -6,14 +6,11 @@ const {
     getAllPlaylists,
     getOnePlaylist,
     postPlaylist,
-    deletePlaylist,
-    addSongToPlaylist,
-    removeSongFromPlaylist
+    editPlaylist,
+    deletePlaylist
 } = require('../../controllers/playlist-controller');
 
 router.route('/').get(getAllPlaylists).post(postPlaylist);
-router.route('/:id').get(getOnePlaylist).delete(deletePlaylist);
-router.route('/:id/add-song').put(addSongToPlaylist);
-router.route('/:id/remove-song').put(removeSongFromPlaylist);
+router.route('/:id').get(getOnePlaylist).put(editPlaylist).delete(deletePlaylist);
 
 module.exports = router;

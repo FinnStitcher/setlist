@@ -66,6 +66,37 @@ const playlistController = {
         });
     },
 
+    async editPlaylist(req, res) {
+        console.log('editPlaylist');
+
+        const searchTerm = req.params.id;
+        const {title, dateLastModified, songs} = req.body;
+
+        Playlist.findOneAndUpdate(
+            {_id: searchTerm},
+            {
+                title: title,
+                dateLastModified: dateLastModified,
+                songs: songs
+            },
+            {new: true}
+
+        )
+        .then(dbRes => {
+            // check that a playlist was found
+            if (!dbRes) {
+                res.status(404).json({message: 'No playlist with that ID.'});
+                return;
+            }
+
+            res.json(dbRes);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        })
+    },
+
     async deletePlaylist(req, res) {
         console.log('deletePlaylist');
 

@@ -6,6 +6,10 @@ const selectedSongEls = document.querySelectorAll('#selected-songs li');
 // needs to be declared out here to avoid scoping issue with selectedSongEls
 const selectedIds = [];
 
+const urlArray = window.location.toString().split('/');
+const playlistId = urlArray[urlArray.length - 1];
+console.log(playlistId);
+
 async function formSubmitHandler(event) {
 	event.preventDefault();
 
@@ -15,19 +19,15 @@ async function formSubmitHandler(event) {
 	});
 
 	// create playlist object
-	// temporarily hardcoding for my acct
-	// later the username wll be added on the backend
 	const playlistObj = {
 		title: titleInputEl.value,
-		dateCreated: Date.now(),
 		dateLastModified: Date.now(),
-		songs: [...selectedSongIds],
-		username: '20firebird'
+		songs: [...selectedSongIds]
 	};
 
 	// send fetch req to server
-	const response = await fetch('/api/playlists', {
-		method: 'POST',
+	const response = await fetch('/api/playlists/' + playlistId, {
+		method: 'PUT',
 		headers: {
 			Accept: 'application/json',
 			'Content-Type': 'application/json'
