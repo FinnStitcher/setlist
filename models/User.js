@@ -43,13 +43,9 @@ UserSchema.methods.comparePassword = async function(inputPassword) {
         throw new Error('No password provided.')
     }
 
-    const validPassword = await bcrypt.compare(inputPassword, this.password);
-
-    if (validPassword) {
-        console.log('password valid')
-    } else {
-        console.log('password invalid')
-    }
+    const isPassValid = await bcrypt.compare(inputPassword, this.password);
+    
+    return isPassValid;
 };
 
 const User = model('User', UserSchema);

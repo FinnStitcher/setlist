@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const mongoose = require('mongoose');
 const path = require('path');
 
@@ -7,12 +8,24 @@ const routes = require('./routes');
 const exphbs = require('express-handlebars');
 const hbs = exphbs.create({});
 
+require('dotenv').config();
+
+const store = new session.MemoryStore();
+const sessionObj = {
+    secret: process.env.SECRET,
+    cookie: {},
+    resave: false,
+    saveUninitialized: false,
+    store: store
+};
+
 const app = express();
 const PORT = process.env.PORT || 1999;
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'src')));
+app.use(session(sessionObj));
 
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');

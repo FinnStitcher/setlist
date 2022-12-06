@@ -47,4 +47,8 @@ router.get('/songs', (req, res) => {
     res.render('create-song');
 });
 
+router.get('/login', (req, res) => {
+    res.render('login');
+});
+
 module.exports = router;
