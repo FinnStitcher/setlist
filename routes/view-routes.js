@@ -2,6 +2,8 @@ const router = require('express').Router();
 const {User, Playlist, Song} = require('../models');
 
 router.get('/playlists', async (req, res) => {
+    const {loggedIn} = req.session;
+
     // get this user's data, incl playlists
     // we'll get the user's id from the session, later
     // right now i'm leaving it randomized
@@ -17,19 +19,23 @@ router.get('/playlists', async (req, res) => {
     .then(dbRes => dbRes)
     .catch(err => err);
 
-    res.render('view-playlists', {userData});
+    res.render('view-playlists', {userData, loggedIn});
 });
 
 router.get('/playlists/new', async (req, res) => {
+    const {loggedIn} = req.session;
+
     const songData = await Song.find()
     .lean()
     .then(dbRes => dbRes)
     .catch(err => err);
 
-    res.render('create-playlist', {songData});
+    res.render('create-playlist', {songData, loggedIn});
 });
 
 router.get('/playlists/edit/:id', async (req, res) => {
+    const {loggedIn} = req.session;
+
     // get info for this playlist
     const playlistData = await Playlist.findOne({_id: req.params.id})
     .lean()
@@ -40,15 +46,19 @@ router.get('/playlists/edit/:id', async (req, res) => {
     .then(dbRes => dbRes)
     .catch(err => err);
 
-    res.render('edit-playlist', {playlistData});
+    res.render('edit-playlist', {playlistData, loggedIn});
 });
 
 router.get('/songs', (req, res) => {
-    res.render('create-song');
+    const {loggedIn} = req.session;
+
+    res.render('create-song', {loggedIn});
 });
 
 router.get('/login', (req, res) => {
-    res.render('login');
+    const {loggedIn} = req.session;
+    
+    res.render('login', {loggedIn});
 });
 
 module.exports = router;

@@ -82,16 +82,15 @@ const userController = {
             }
 
             // add user data to the session
-            req.session.save(() => {
+            await req.session.save(() => {
                 req.session.user_id = dbRes._id.toString();
                 req.session.username = dbRes.username;
                 req.session.loggedIn = true;
 
-                console.log(req.session);
-
                 res.status(200).json({
                     user: dbRes,
-                    message: 'You\'re logged in.'
+                    message: 'You\'re logged in.',
+                    session: req.session
                 });
             });
         })

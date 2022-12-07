@@ -13,7 +13,9 @@ require('dotenv').config();
 const store = new session.MemoryStore();
 const sessionObj = {
     secret: process.env.SECRET,
-    cookie: {},
+    cookie: {
+        maxAge: 2592000000
+    },
     resave: false,
     saveUninitialized: false,
     store: store
