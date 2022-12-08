@@ -9,7 +9,7 @@ function logoutHandler() {
         method: 'POST'
     })
     .then(response => {
-        console.log(response);
+        // TODO: warn of redirect
         window.location.assign('/');
     });
 };

@@ -1,6 +1,16 @@
 const router = require('express').Router();
 const {User, Playlist, Song} = require('../models');
 
+router.get('/', async (req, res) => {
+    const {loggedIn} = req.session;
+
+    if (loggedIn) {
+        window.location.assign('/playlists');
+    } else {
+        res.render('homepage', {loggedIn});
+    }
+})
+
 router.get('/playlists', async (req, res) => {
     const {loggedIn} = req.session;
 
