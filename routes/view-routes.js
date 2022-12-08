@@ -9,16 +9,18 @@ router.get('/', async (req, res) => {
     } else {
         res.render('homepage', {loggedIn});
     }
-})
+});
 
 router.get('/playlists', async (req, res) => {
-    const {loggedIn} = req.session;
+    const {loggedIn, user_id} = req.session;
 
     // get this user's data, incl playlists
-    // we'll get the user's id from the session, later
-    // right now i'm leaving it randomized
     // using .lean() so data can be fed into handlebars
-    const userData = await User.findOne()
+    const userData = await User.findOne({
+        where: {
+            _id: user_id
+        }
+    })
     .lean()
     .select('-password -__v')
     .populate({

@@ -35,25 +35,22 @@ const playlistController = {
         console.log('postPlaylist');
 
         const {body} = req;
+        const {user_id} = req.session;
 
-        // temp verification
-        // check that user exists
-        // will replace this when sessions are set up
-        const userExists = await User.findOne({
-            username: body.username
-        });
-
-        if (!userExists) {
-            res.status(400).json({message: 'User not found.'});
+        // confirm user is logged-in
+        if (!user_id) {
+            res.status(401).json({message: 'You need to be logged in to do this.'});
+            return;
         }
 
         Playlist.create(body)
         .then(dbRes => {
-            // destructure out username and playlist id
-            const {_id, username} = dbRes;
+            // destructure out playlist id
+            const {_id} = dbRes;
 
+            // update relevant user profile
             return User.findOneAndUpdate(
-                {username: username},
+                {_id: user_id},
                 {$push: {playlists: _id}},
                 {new: true}
             )
@@ -69,11 +66,34 @@ const playlistController = {
     async editPlaylist(req, res) {
         console.log('editPlaylist');
 
-        const searchTerm = req.params.id;
+        const playlistId = req.params.id;
         const {title, dateLastModified, songs} = req.body;
+        const {loggedIn, user_id} = req.session;
+
+        // check that user is logged in
+        if (!loggedIn) {
+            res.status(401).json({message: 'You need to be logged in to do this.'});
+            return;
+        }
+
+        // check that user owns this playlist
+        const belongsToUser = await User.findOne({
+            where: {
+                _id: user_id
+            }
+        })
+        .then(dbRes => {
+            // check if this pl is in the user's playlist array
+            return dbRes.playlists.indexOf(playlistId) !== -1;
+        });
+
+        if (!belongsToUser) {
+            res.status(403).json({messages: 'You can\'t edit someone else\'s playlist.'});
+            return;
+        }
 
         Playlist.findOneAndUpdate(
-            {_id: searchTerm},
+            {_id: playlistId},
             {
                 title: title,
                 dateLastModified: dateLastModified,
@@ -100,10 +120,33 @@ const playlistController = {
     async deletePlaylist(req, res) {
         console.log('deletePlaylist');
 
-        const searchTerm = req.params.id;
+        const playlistId = req.params.id;
+        const {loggedIn, user_id} = req.session;
+
+        // check that user is logged in
+        if (!loggedIn) {
+            res.status(401).json({message: 'You need to be logged in to do this.'});
+            return;
+        }
+
+        // check that user owns this playlist
+        const belongsToUser = await User.findOne({
+            where: {
+                _id: user_id
+            }
+        })
+        .then(dbRes => {
+            // check if this pl is in the user's playlist array
+            return dbRes.playlists.indexOf(playlistId) !== -1;
+        });
+
+        if (!belongsToUser) {
+            res.status(403).json({messages: 'You can\'t delete someone else\'s playlist.'});
+            return;
+        }
 
         Playlist.findOneAndDelete(
-            {_id: searchTerm}
+            {_id: playlistId}
         )
         .then(dbRes => {
             // check that a playlist was found
