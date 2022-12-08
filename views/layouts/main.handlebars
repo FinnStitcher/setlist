@@ -19,6 +19,9 @@
             <div class="nav-link">
                 <a href="/songs">Submit a Song</a>
             </div>
+            <div class="nav-link">
+                <button type="button" id="logout">Logout</button>
+            </div>
             {{else}}
             <div class="nav-link">
                 <a href="/login">Log In</a>
@@ -33,5 +36,9 @@
     <main class="px-6 py-4">
         {{{body}}}
     </main>
+
+    {{#if loggedIn}}
+        <script src="/js/logout.js"></script>
+    {{/if}}
 </body>
 </html>

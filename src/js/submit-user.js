@@ -11,7 +11,7 @@ async function loginHandler(event) {
     const password = passwordInputEl.value.trim();
 
     if (username && password) {
-        const response = await fetch('/api/users/login', {
+        const response = await fetch('/api/users', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -21,7 +21,7 @@ async function loginHandler(event) {
         });
 
         if (response.ok) {
-            // TODO: Confirm login
+            // TODO: Confirm signup
             window.location.assign('/playlists');
         } else {
             console.log('something went wrong');
