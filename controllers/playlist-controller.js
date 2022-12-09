@@ -114,7 +114,7 @@ const playlistController = {
         .catch(err => {
             console.log(err);
             res.status(500).json(err);
-        })
+        });
     },
 
     async deletePlaylist(req, res) {
