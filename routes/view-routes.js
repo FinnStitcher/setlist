@@ -99,4 +99,10 @@ router.get('/signup', (req, res) => {
     res.render('signup', {loggedIn});
 });
 
+router.get('*', (req, res) => {
+    const {loggedIn} = req.session;
+    
+    res.render('not-found', {loggedIn});
+});
+
 module.exports = router;
