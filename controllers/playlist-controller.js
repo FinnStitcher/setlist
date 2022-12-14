@@ -78,9 +78,7 @@ const playlistController = {
 
         // check that user owns this playlist
         const belongsToUser = await User.findOne({
-            where: {
-                _id: user_id
-            }
+            _id: user_id
         })
         .then(dbRes => {
             // check if this pl is in the user's playlist array
@@ -131,9 +129,7 @@ const playlistController = {
 
         // check that user owns this playlist
         const belongsToUser = await User.findOne({
-            where: {
-                _id: user_id
-            }
+            _id: user_id
         })
         .then(dbRes => {
             // check if this pl is in the user's playlist array

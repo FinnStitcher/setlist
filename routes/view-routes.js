@@ -22,9 +22,7 @@ router.get('/playlists', async (req, res) => {
     // get this user's data, incl playlists
     // using .lean() so data can be fed into handlebars
     const userData = await User.findOne({
-        where: {
-            _id: user_id
-        }
+        _id: user_id
     })
     .lean()
     .select('-password -__v')
@@ -38,6 +36,41 @@ router.get('/playlists', async (req, res) => {
 
     res.render('view-playlists', {userData, loggedIn});
 });
+
+router.get('/playlists/:id', async (req, res) => {
+    const {loggedIn, user_id} = req.session;
+    const {id: playlistId} = req.params;
+
+    // using .lean() so data can be fed into handlebars
+    const playlistData = await Playlist.findOne({
+        _id: playlistId
+    })
+    .lean()
+    .populate('songs')
+    .then(dbRes => dbRes)
+    .catch(err => err);
+
+    // if loggedIn, locate this user in the db
+    // check if this playlist's id is in their playlists array
+    // const {_id} = playlistData;
+
+    // let belongsToThisUser = false;
+    
+    // if (loggedIn) {
+    //     const userData = User.findOne({
+    //         _id: user_id
+    //     })
+    //     .lean()
+    //     .then(dbRes => dbRes)
+    //     .catch(err => err);
+
+    //     // if this playlist is present in userData.playlists, this will be true
+    //     console.log(userData);
+    //     // belongsToThisUser = userData.playlists.indexOf(_id) !== -1;
+    // }
+
+    res.render('single-playlist', {playlistData, loggedIn});
+})
 
 router.get('/add-playlist', async (req, res) => {
     const {loggedIn} = req.session;
@@ -64,7 +97,9 @@ router.get('/edit-playlist/:id', async (req, res) => {
     }
 
     // get info for this playlist
-    const playlistData = await Playlist.findOne({_id: req.params.id})
+    const playlistData = await Playlist.findOne({
+        _id: req.params.id
+    })
     .lean()
     .select('-__v -username')
     .populate({
