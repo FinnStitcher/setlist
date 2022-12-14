@@ -52,24 +52,28 @@ router.get('/playlists/:id', async (req, res) => {
 
     // if loggedIn, locate this user in the db
     // check if this playlist's id is in their playlists array
-    // const {_id} = playlistData;
+    const {_id} = playlistData;
 
-    // let belongsToThisUser = false;
+    let belongsToThisUser = false;
     
-    // if (loggedIn) {
-    //     const userData = User.findOne({
-    //         _id: user_id
-    //     })
-    //     .lean()
-    //     .then(dbRes => dbRes)
-    //     .catch(err => err);
+    if (loggedIn) {
+        const userData = await User.findOne({
+            _id: user_id
+        })
+        .lean()
+        .then(dbRes => dbRes)
+        .catch(err => err);
 
-    //     // if this playlist is present in userData.playlists, this will be true
-    //     console.log(userData);
-    //     // belongsToThisUser = userData.playlists.indexOf(_id) !== -1;
-    // }
+        // ids are stored as instances of ObjectID, so we can't just use indexOf
+        userData.playlists.forEach(element => {
+            if (element.toString() === _id.toString()) {
+                belongsToThisUser = true;
+                return;
+            }
+        });
+    }
 
-    res.render('single-playlist', {playlistData, loggedIn});
+    res.render('single-playlist', {playlistData, belongsToThisUser, loggedIn});
 })
 
 router.get('/add-playlist', async (req, res) => {

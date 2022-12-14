@@ -1,16 +1,18 @@
 <div class="mb-4">
     <h2 class="text-xl mb-1 border-b-2 border-stone-300">{{playlistData.title}}</h2>
-</div>
 
-<div>
     {{#if belongsToThisUser}}
-        <div class="border-t-2 border-stone-400">
+        <div>
             <a role="button" href="/edit-playlist/{{playlistData._id}}" class="inline-block w-36 bg-stone-300 p-2">Edit</a>
 
             <button type="button" data-id="{{playlistData._id}}" class="inline-block w-36 bg-stone-300 p-2 text-left del-btn">Delete</button>
         </div>
     {{/if}}
+</div>
 
+<p class="mb-4">Assembled by: <span class="font-semibold">{{playlistData.username}}</span></p>
+
+<div class="border-2 border-stone-300">
     <ul class="pl-3 py-2.5 divide-y space-y-1.5">
         {{#each playlistData.songs as |song|}}
             {{> song song}}

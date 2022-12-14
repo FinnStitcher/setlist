@@ -1,6 +1,10 @@
 <section class="border-2 border-stone-300 mb-3">
     <div class="bg-stone-300 p-1.5 flex justify-between sm:justify-start pl-title">
-        <h3>{{this.title}}</h3>
+        <h3>
+            <a href="/playlists/{{this._id}}">
+                {{this.title}}
+            </a>
+        </h3>
         <p class="ml-2 md:ml-4">▼</p>
     </div>
     
@@ -11,10 +15,17 @@
             <button type="button" data-id="{{this._id}}" class="inline-block w-36 bg-stone-300 p-2 text-left del-btn">Delete</button>
         </div>
 
-        <ul class="pl-3 py-2.5 divide-y space-y-1.5">
+        <div class="pl-3 py-2.5">
+        <ul class="divide-y space-y-1.5">
             {{#each this.songs as |song|}}
                 {{> song song}}
             {{/each}}
         </ul>
+
+        <hr class="my-4 border-stone-400">
+
+        <p class="-mt-2"><a href="/playlists/{{this._id}}">Link to this playlist.</a></p>
+
+        </div>
     </div>
 </section>
