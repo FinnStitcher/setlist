@@ -14,6 +14,11 @@ router.get('/', async (req, res) => {
 router.get('/playlists', async (req, res) => {
     const {loggedIn, user_id} = req.session;
 
+    if (!loggedIn) {
+        res.render('auth-failed', {loggedIn});
+        return;
+    }
+
     // get this user's data, incl playlists
     // using .lean() so data can be fed into handlebars
     const userData = await User.findOne({
@@ -34,8 +39,13 @@ router.get('/playlists', async (req, res) => {
     res.render('view-playlists', {userData, loggedIn});
 });
 
-router.get('/playlists/new', async (req, res) => {
+router.get('/add-playlist', async (req, res) => {
     const {loggedIn} = req.session;
+
+    if (!loggedIn) {
+        res.render('auth-failed', {loggedIn});
+        return;
+    }
 
     const songData = await Song.find()
     .lean()
@@ -45,8 +55,13 @@ router.get('/playlists/new', async (req, res) => {
     res.render('create-playlist', {songData, loggedIn});
 });
 
-router.get('/playlists/edit/:id', async (req, res) => {
+router.get('/edit-playlist/:id', async (req, res) => {
     const {loggedIn} = req.session;
+
+    if (!loggedIn) {
+        res.render('auth-failed', {loggedIn});
+        return;
+    }
 
     // get info for this playlist
     const playlistData = await Playlist.findOne({_id: req.params.id})
@@ -61,8 +76,13 @@ router.get('/playlists/edit/:id', async (req, res) => {
     res.render('edit-playlist', {playlistData, loggedIn});
 });
 
-router.get('/songs', (req, res) => {
+router.get('/add-song', (req, res) => {
     const {loggedIn} = req.session;
+
+    if (!loggedIn) {
+        res.render('auth-failed', {loggedIn});
+        return;
+    }
 
     res.render('create-song', {loggedIn});
 });
