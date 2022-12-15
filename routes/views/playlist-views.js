@@ -1,15 +1,5 @@
 const router = require('express').Router();
-const {User, Playlist, Song} = require('../models');
-
-router.get('/', async (req, res) => {
-    const {loggedIn} = req.session;
-
-    if (loggedIn) {
-        window.location.assign('/playlists');
-    } else {
-        res.render('homepage', {loggedIn});
-    }
-});
+const {Playlist, User, Song} = require('../../models');
 
 router.get('/playlists', async (req, res) => {
     const {loggedIn, user_id} = req.session;
@@ -34,7 +24,7 @@ router.get('/playlists', async (req, res) => {
     .then(dbRes => dbRes)
     .catch(err => err);
 
-    res.render('view-playlists', {userData, loggedIn});
+    res.render('view-playlists', {userData, belongsToThisUser: true, loggedIn});
 });
 
 router.get('/playlists/:id', async (req, res) => {
@@ -47,6 +37,16 @@ router.get('/playlists/:id', async (req, res) => {
     })
     .lean()
     .populate('songs')
+    .then(dbRes => dbRes)
+    .catch(err => err);
+
+    // usernames are unique, so this works ok
+    // may instate a more elegant methodology later
+    const playlistOwnerData = await User.findOne({
+        username: playlistData.username
+    })
+    .lean()
+    .select('_id username')
     .then(dbRes => dbRes)
     .catch(err => err);
 
@@ -73,7 +73,7 @@ router.get('/playlists/:id', async (req, res) => {
         });
     }
 
-    res.render('single-playlist', {playlistData, belongsToThisUser, loggedIn});
+    res.render('single-playlist', {playlistData, playlistOwnerData, belongsToThisUser, loggedIn});
 })
 
 router.get('/add-playlist', async (req, res) => {
@@ -113,29 +113,6 @@ router.get('/edit-playlist/:id', async (req, res) => {
     .catch(err => err);
 
     res.render('edit-playlist', {playlistData, loggedIn});
-});
-
-router.get('/add-song', (req, res) => {
-    const {loggedIn} = req.session;
-
-    if (!loggedIn) {
-        res.render('auth-failed', {loggedIn});
-        return;
-    }
-
-    res.render('create-song', {loggedIn});
-});
-
-router.get('/login', (req, res) => {
-    const {loggedIn} = req.session;
-    
-    res.render('login', {loggedIn});
-});
-
-router.get('/signup', (req, res) => {
-    const {loggedIn} = req.session;
-    
-    res.render('signup', {loggedIn});
 });
 
 module.exports = router;

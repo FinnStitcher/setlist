@@ -6,8 +6,8 @@
 
 <div id="playlist-container">
     {{#each userData.playlists as |pl|}}
-        {{> playlist pl}}
-    {{/each}}    
+        {{> playlist pl=pl belongsToThisUser=../belongsToThisUser}}
+    {{/each}}
 </div>
 
 <script src="/js/toggle-playlist.js"></script>

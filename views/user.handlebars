@@ -1,0 +1,13 @@
+<div class="mb-4">
+    <h2 class="text-xl mb-1 border-b-2 border-stone-300">
+        User: {{userData.username}}
+    </h2>
+</div>
+
+<div id="playlist-container">
+    {{#each userData.playlists as |pl|}}
+        {{> playlist pl=pl belongsToThisUser=../belongsToThisUser}}
+    {{/each}}
+</div>
+
+<script src="/js/toggle-playlist.js"></script>
