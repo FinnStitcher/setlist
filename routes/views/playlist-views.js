@@ -41,7 +41,6 @@ router.get('/playlists/:id', async (req, res) => {
     .catch(err => err);
 
     // usernames are unique, so this works ok
-    // may instate a more elegant methodology later
     const playlistOwnerData = await User.findOne({
         username: playlistData.username
     })
@@ -50,27 +49,22 @@ router.get('/playlists/:id', async (req, res) => {
     .then(dbRes => dbRes)
     .catch(err => err);
 
+    let belongsToThisUser = false;
+
     // if loggedIn, locate this user in the db
     // check if this playlist's id is in their playlists array
-    const {_id} = playlistData;
-
-    let belongsToThisUser = false;
-    
     if (loggedIn) {
-        const userData = await User.findOne({
+        // not using lean here because this data won't be displayed
+        // and it breaks the if statement
+        const thisUserData = await User.findOne({
             _id: user_id
         })
-        .lean()
         .then(dbRes => dbRes)
         .catch(err => err);
 
-        // ids are stored as instances of ObjectID, so we can't just use indexOf
-        userData.playlists.forEach(element => {
-            if (element.toString() === _id.toString()) {
-                belongsToThisUser = true;
-                return;
-            }
-        });
+        if (thisUserData.playlists.indexOf(playlistId) !== -1) {
+            belongsToThisUser = true;
+        }
     }
 
     res.render('single-playlist', {playlistData, playlistOwnerData, belongsToThisUser, loggedIn});
