@@ -2,8 +2,7 @@
     <h2 class="text-xl mb-1 border-b-2 border-stone-300">Your Playlists</h2>
 
     <a role="button" href="/add-playlist" class="inline-block w-48 bg-stone-300 p-2">Create New +</a>
-    <button role="button" class="inline-block w-48 bg-stone-300 p-2 ml-1 text-left">Share Profile</button>
-    {{!-- this button will pull up a modal with the text, for now --}}
+    <button role="button" class="inline-block w-48 bg-stone-300 p-2 ml-1 text-left" data-btnuse="open-modal">Share Profile</button>
 </div>
 
 <div id="playlist-container">
@@ -12,5 +11,12 @@
     {{/each}}
 </div>
 
+<dialog id="modal" class="w-2/5 rounded-sm p-2 outline outline-2 outline-offset-4 outline-stone-500 bg-stone-500 text-stone-100 modal">
+    <p>To share your profile with others, copy this link.</p>
+    <p id="profile-url" class="mx-3 my-2 bg-stone-300 text-stone-800 rounded-md p-1" data-userid="{{userData._id}}">url goes here</p>
+    <button data-btnuse="close-modal">Close</button>
+</dialog>
+
 <script src="/js/toggle-playlist.js"></script>
 <script src="/js/delete-playlist.js"></script>
+<script src="/js/modal.js"></script>
