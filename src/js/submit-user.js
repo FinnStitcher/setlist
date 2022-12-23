@@ -2,9 +2,12 @@ const formEl = document.getElementById('user-form');
 const usernameInputEl = document.getElementById('username');
 const passwordInputEl = document.getElementById('password');
 
-formEl.addEventListener('submit', loginHandler);
+const modal = document.querySelector('#modal');
+const closeModal = document.querySelector('[data-btnuse="close-modal"]');
 
-async function loginHandler(event) {
+formEl.addEventListener('submit', signupHandler);
+
+async function signupHandler(event) {
     event.preventDefault();
 
     const username = usernameInputEl.value.trim();
@@ -21,10 +24,16 @@ async function loginHandler(event) {
         });
 
         if (response.ok) {
-            // TODO: Confirm signup
-            window.location.assign('/playlists');
+            modal.showModal();
+
+            setTimeout(() => {
+                window.location.assign('/playlists')
+            }, 3000);
         } else {
-            console.log('something went wrong');
+            const modalText = document.querySelector('dialog p');
+            modalText.textContent = 'Something went wrong with signing you up. Most likely, something is wrong with the server, but double-check that your input is valid.';
+
+            modal.showModal();
         }
     }
 };
