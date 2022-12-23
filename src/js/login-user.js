@@ -2,8 +2,8 @@ const formEl = document.getElementById('user-form');
 const usernameInputEl = document.getElementById('username');
 const passwordInputEl = document.getElementById('password');
 
-const modal = document.querySelector('#modal');
-const closeModal = document.querySelector('[data-btnuse="close-modal"]');
+const modal = document.querySelector('#login-modal');
+const closeModal = document.querySelector('[data-modal-btn="close-modal"]');
 
 formEl.addEventListener('submit', loginHandler);
 

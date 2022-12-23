@@ -1,12 +1,12 @@
-const modal = document.querySelector('#modal');
-const openModal = document.querySelector('[data-btnuse="open-modal"]');
-const closeModal = document.querySelector('[data-btnuse="close-modal"]');
+const modal = document.querySelector('#link-modal');
+const openModal = document.querySelector('[data-modal-btn="open-modal"]');
+const closeModal = document.querySelector('[data-modal-btn="close-modal"]');
 
 const profileUrl = document.querySelector('#profile-url');
 
 openModal.addEventListener('click', () => {
     if (profileUrl) {
-        profileUrl.textContent = window.location.origin + '/users/' + profileUrl.getAttribute('data-userid');
+        profileUrl.textContent = window.location.origin + '/users/' + profileUrl.getAttribute('data-user-id');
     };
 
     modal.showModal();

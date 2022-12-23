@@ -9,7 +9,7 @@
         <div class="border-t-2 border-stone-400">
             <a role="button" href="/edit-playlist/{{pl._id}}" class="inline-block w-36 bg-stone-300 p-2">Edit</a>
 
-            <button type="button" data-id="{{pl._id}}" class="inline-block w-36 bg-stone-300 p-2 text-left del-btn">Delete</button>
+            <button type="button" data-id="{{pl._id}}" data-modal-btn="open-modal" data-btn-type="del-btn" class="inline-block w-36 bg-stone-300 p-2 text-left">Delete</button>
         </div>
         {{/if}}
 
