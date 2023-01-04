@@ -2,8 +2,8 @@ const formEl = document.getElementById('user-form');
 const usernameInputEl = document.getElementById('username');
 const passwordInputEl = document.getElementById('password');
 
-const modal = document.querySelector('#login-modal');
-const closeModal = document.querySelector('[data-modal-btn="close-modal"]');
+const loginModal = document.getElementById('login-modal');
+const loginModalCloseBtn = document.getElementById('login-modal-close-btn');
 
 formEl.addEventListener('submit', loginHandler);
 
@@ -24,20 +24,20 @@ async function loginHandler(event) {
         });
 
         if (response.ok) {
-            modal.showModal();
+            loginModal.showModal();
 
             setTimeout(() => {
                 window.location.assign('/playlists')
-            }, 2500);
+            }, 2000);
         } else {
             const modalText = document.querySelector('dialog p');
             modalText.textContent = 'Something went wrong with your log-in. Check your info and try again.';
 
-            modal.showModal();
+            loginModal.showModal();
         }
     }
 };
 
-closeModal.addEventListener('click', () => {
-    modal.close();
+loginModalCloseBtn.addEventListener('click', () => {
+    loginModal.close();
 });

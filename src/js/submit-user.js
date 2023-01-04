@@ -2,8 +2,8 @@ const formEl = document.getElementById('user-form');
 const usernameInputEl = document.getElementById('username');
 const passwordInputEl = document.getElementById('password');
 
-const modal = document.querySelector('#signup-modal');
-const closeModal = document.querySelector('[data-modal-btn="close-modal"]');
+const signupModal = document.getElementById('signup-modal');
+const signupModalCloseBtn = document.getElementById('signup-modal-close-btn');
 
 formEl.addEventListener('submit', signupHandler);
 
@@ -24,7 +24,7 @@ async function signupHandler(event) {
         });
 
         if (response.ok) {
-            modal.showModal();
+            signupModal.showModal();
 
             setTimeout(() => {
                 window.location.assign('/playlists')
@@ -33,7 +33,11 @@ async function signupHandler(event) {
             const modalText = document.querySelector('dialog p');
             modalText.textContent = 'Something went wrong with signing you up. Most likely, something is wrong with the server, but double-check that your input is valid.';
 
-            modal.showModal();
+            signupModal.showModal();
         }
     }
 };
+
+signupModalCloseBtn.addEventListener('click', () => {
+    signupModal.close();
+});
