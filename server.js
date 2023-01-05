@@ -10,19 +10,8 @@ const exphbs = require('express-handlebars');
 const hbs = exphbs.create({});
 
 require('dotenv').config();
-// const store = new session.MemoryStore();
-// const sessionObj = {
-//     secret: process.env.SECRET,
-//     cookie: {
-//         maxAge: 2592000000
-//     },
-//     resave: false,
-//     saveUninitialized: false,
-//     store: store
-// };
 
 const app = express();
-//const MongoStore = new connectStore(session);
 const PORT = process.env.PORT || 1999;
 
 const sessionObj = {
@@ -35,8 +24,7 @@ const sessionObj = {
         mongooseConnection: mongoose.connection,
         collection: 'session',
         ttl: parseInt(process.env.SESSION_LIFETIME) / 1000,
-        touchAfter: 60 * 60 * 24,
-        autoRemove: 'native'
+        touchAfter: 60 * 60 * 24
     }),
     cookie: {
         sameSite: true,

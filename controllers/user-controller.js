@@ -51,6 +51,7 @@ const userController = {
 
                 res.status(201).json({
                     user: dbRes,
+                    session: req.session,
                     message: 'You\'re logged in.'
                 });
             });
@@ -94,8 +95,8 @@ const userController = {
 
                 res.status(200).json({
                     user: dbRes,
-                    message: 'You\'re logged in.',
-                    session: req.session
+                    session: req.session,
+                    message: 'You\'re logged in.'
                 });
             });
         })
@@ -110,7 +111,12 @@ const userController = {
 
         // if logged in, destroy session
         if (req.session.loggedIn) {
-            req.session.destroy(() => {
+            req.session.destroy((err) => {
+                if (err) {
+                    throw err;
+                }
+
+                res.clearCookie(process.env.SESSION_NAME);
                 res.status(204).end();
             })
             return;
