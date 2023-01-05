@@ -3,7 +3,7 @@ const {Playlist, User, Song} = require('../../models');
 const {checkUserOwnership} = require('../../utils/utils.js');
 
 router.get('/playlists', async (req, res) => {
-    const {loggedIn, user_id} = req.session;
+    const {loggedIn, user_id} = await req.session;
 
     if (!loggedIn) {
         res.render('auth-failed', {loggedIn});
