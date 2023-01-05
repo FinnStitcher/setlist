@@ -27,7 +27,7 @@ async function loginHandler(event) {
             loginModal.showModal();
 
             setTimeout(() => {
-                window.location.assign('/playlists')
+                window.location.assign('/playlists');
             }, 2000);
         } else {
             const modalText = document.querySelector('dialog p');

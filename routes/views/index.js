@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const url = require('url');
 
 // /
 
@@ -14,7 +15,9 @@ router.get('/', async (req, res) => {
     const {loggedIn} = req.session;
 
     if (loggedIn) {
-        window.location.assign('/playlists');
+        const formattedUrl = req.protocol + '://' + req.get('host');
+
+        res.redirect(formattedUrl + '/playlists');
     } else {
         res.render('homepage', {loggedIn});
     }
