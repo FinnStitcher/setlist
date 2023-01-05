@@ -11,7 +11,7 @@ router.use('/', userViews);
 router.use('/', playlistViews);
 router.use('/', songViews);
 
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
     const {loggedIn} = req.session;
 
     if (loggedIn) {
