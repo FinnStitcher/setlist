@@ -7,6 +7,6 @@ const {getAllUsers, getOneUser, postUser, loginUser, logoutUser} = require('../.
 router.route('/').get(getAllUsers).post(postUser);
 router.route('/:id').get(getOneUser);
 router.route('/login').post(loginUser);
-router.route('/logout').post(logoutUser);
+router.route('/logout').delete(logoutUser);
 
 module.exports = router;

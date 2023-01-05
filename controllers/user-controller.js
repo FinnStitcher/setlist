@@ -1,5 +1,7 @@
 const {User} = require('../models');
 
+require('dotenv').config();
+
 const userController = {
     getAllUsers(req, res) {
         console.log('getAllUsers');

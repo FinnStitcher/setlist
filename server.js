@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const mongoose = require('mongoose');
+const MongoStore = require('connect-mongo');
 const path = require('path');
 
 const routes = require('./routes');
@@ -9,20 +10,40 @@ const exphbs = require('express-handlebars');
 const hbs = exphbs.create({});
 
 require('dotenv').config();
-
-const store = new session.MemoryStore();
-const sessionObj = {
-    secret: process.env.SECRET,
-    cookie: {
-        maxAge: 2592000000
-    },
-    resave: false,
-    saveUninitialized: false,
-    store: store
-};
+// const store = new session.MemoryStore();
+// const sessionObj = {
+//     secret: process.env.SECRET,
+//     cookie: {
+//         maxAge: 2592000000
+//     },
+//     resave: false,
+//     saveUninitialized: false,
+//     store: store
+// };
 
 const app = express();
+//const MongoStore = new connectStore(session);
 const PORT = process.env.PORT || 1999;
+
+const sessionObj = {
+    name: process.env.SESSION_NAME,
+    secret: process.env.SECRET,
+    saveUninitialized: false,
+    resave: false,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost/setlist-app',
+        mongooseConnection: mongoose.connection,
+        collection: 'session',
+        ttl: parseInt(process.env.SESSION_LIFETIME) / 1000,
+        touchAfter: 60 * 60 * 24,
+        autoRemove: 'native'
+    }),
+    cookie: {
+        sameSite: true,
+        //secure: NODE_ENV === 'production',
+        maxAge: parseInt(process.env.SESSION_LIFETIME)
+    }
+};
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -34,7 +55,8 @@ app.set('view engine', 'handlebars');
 
 app.use(routes);
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/setlist-app', {
+// 127.0.0.1:27017
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/setlist-app', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
