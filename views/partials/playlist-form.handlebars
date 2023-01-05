@@ -2,16 +2,16 @@
 <form id="playlist-form">
     <div>
         <label for="playlist-name" class="block text-lg mb-0.5">Title</label>
-        <input id="playlist-name" name="playlist-name" class="block w-full md:w-96 border border-amber-600/50" value="{{title}}">
+        <input id="playlist-name" name="playlist-name" class="form-control" value="{{title}}">
         {{!-- value will be filled out if a title property is present --}}
     </div>
 
-    <hr class="my-4 border-stone-400">
+    <hr>
 
     <div>
         <label class="block text-lg mb-0.5">Songs</label>
 
-        <ul class="bg-stone-200 pl-3 py-2.5 divide-y space-y-1.5 min-h-12 mb-2 lg:w-3/5" id="selected-songs">
+        <ul class="form-song-list" id="selected-songs">
             {{#each songs as |s|}}
                 {{> song-simple s}}
             {{/each}}
@@ -19,14 +19,14 @@
         </ul>
 
         <label for="song-search" class="block mb-0.5">Search:</label>
-        <input id="song-search" name="song-search" class="block w-full md:w-96 border border-amber-600/50">
+        <input id="song-search" name="song-search" class="form-control">
 
-        <ul class="bg-stone-200 pl-3 py-2.5 divide-y space-y-1.5 min-h-12 lg:w-3/5" id="song-search-results">
+        <ul class="form-song-list" id="song-search-results">
             {{!-- songs will print out in here --}}
         </ul>
     </div>
 
-    <hr class="my-4 border-stone-400">
+    <hr>
 
-    <button type="submit" class="block w-48 bg-stone-300 p-2">Submit</button>
+    <button type="submit" class="rectangle-btn">Submit</button>
 </form>
