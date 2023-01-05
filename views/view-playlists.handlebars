@@ -2,7 +2,7 @@
     <h2 class="text-xl mb-1 border-b-2 border-stone-300">Your Playlists</h2>
 
     <a role="button" href="/add-playlist" class="inline-block w-48 bg-stone-300 p-2">Create New +</a>
-    <button role="button" class="inline-block w-48 bg-stone-300 p-2 ml-1 text-left" id="link-modal-btn" data-for-modal="link-modal">Share Profile</button>
+    <button role="button" class="inline-block w-48 bg-stone-300 p-2 mt-1 sm:mt-0 sm:ml-1 text-left" id="link-modal-btn" data-for-modal="link-modal">Share Profile</button>
 </div>
 
 <div id="playlist-container">
@@ -20,7 +20,7 @@
 {{#> modal modalId="confirm-del-modal" closeBtnId="confirm-del-close-btn"}}
     <p>Are you sure you want to delete this playlist? If you want it back, you have to entirely remake it.</p>
 
-    <button class="font-semibold" id="confirm-del-btn" data-for-modal="confirm-del-modal">Yes, I want to delete it</button>
+    <button class="font-semibold block mt-0.5" id="confirm-del-btn" data-for-modal="confirm-del-modal">Yes, I want to delete it</button>
 {{/modal}}
 
 {{#> modal modalId="del-complete-modal" closeBtnId="del-complete-close-btn"}}
