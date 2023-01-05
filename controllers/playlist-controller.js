@@ -35,11 +35,8 @@ const playlistController = {
     async postPlaylist(req, res) {
         console.log('postPlaylist');
 
-        const {body} = req;
+        const {title, dateCreated, dateLastModified, songs} = req.body;
         const {user_id, username} = req.session;
-
-        // add username to playlist document
-        body.username = username;
 
         // confirm user is logged-in
         if (!user_id) {
@@ -47,7 +44,13 @@ const playlistController = {
             return;
         }
 
-        Playlist.create(body)
+        Playlist.create({
+            title,
+            dateCreated,
+            dateLastModified,
+            songs,
+            username
+        })
         .then(dbRes => {
             // destructure out playlist id
             const {_id} = dbRes;
@@ -81,14 +84,6 @@ const playlistController = {
         }
 
         // check that user owns this playlist
-        // const belongsToThisUser = await User.findOne({
-        //     _id: user_id
-        // })
-        // .then(dbRes => {
-        //     // check if this pl is in the user's playlist array
-        //     return dbRes.playlists.indexOf(playlistId) !== -1;
-        // });
-
         const belongsToThisUser = await checkUserOwnership(loggedIn, user_id, playlistId);
 
         if (!belongsToThisUser) {

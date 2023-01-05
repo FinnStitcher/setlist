@@ -35,9 +35,12 @@ const userController = {
     postUser(req, res) {
         console.log('postUser');
 
-        const {body} = req;
+        const {username, password} = req.body;
 
-        User.create(body)
+        User.create({
+            username,
+            password
+        })
         .then(dbRes => {
             req.session.save(() => {
                 req.session.user_id = dbRes._id;

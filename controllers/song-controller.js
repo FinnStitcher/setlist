@@ -76,9 +76,14 @@ const songController = {
     postSong(req, res) {
         console.log('postSong');
 
-        const {body} = req;
+        const {title, artist, album, year} = req.body;
 
-        Song.create(body)
+        Song.create({
+            title,
+            artist,
+            album: album? album : null,
+            year: year? year : null
+        })
         .then(dbRes => res.json(dbRes))
         .catch(err => {
             console.log(err);
