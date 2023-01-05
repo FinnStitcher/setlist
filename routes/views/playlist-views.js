@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const {Playlist, User, Song} = require('../../models');
+const {checkUserOwnership} = require('../../utils/utils.js');
 
 router.get('/playlists', async (req, res) => {
     const {loggedIn, user_id} = req.session;
@@ -49,23 +50,7 @@ router.get('/playlists/:id', async (req, res) => {
     .then(dbRes => dbRes)
     .catch(err => err);
 
-    let belongsToThisUser = false;
-
-    // if loggedIn, locate this user in the db
-    // check if this playlist's id is in their playlists array
-    if (loggedIn) {
-        // not using lean here because this data won't be displayed
-        // and it breaks the if statement
-        const thisUserData = await User.findOne({
-            _id: user_id
-        })
-        .then(dbRes => dbRes)
-        .catch(err => err);
-
-        if (thisUserData.playlists.indexOf(playlistId) !== -1) {
-            belongsToThisUser = true;
-        }
-    }
+    const belongsToThisUser = await checkUserOwnership(loggedIn, user_id, playlistId);
 
     res.render('single-playlist', {playlistData, playlistOwnerData, belongsToThisUser, loggedIn});
 })
@@ -87,9 +72,13 @@ router.get('/add-playlist', async (req, res) => {
 });
 
 router.get('/edit-playlist/:id', async (req, res) => {
-    const {loggedIn} = req.session;
+    const {loggedIn, user_id} = req.session;
+    const {id: playlistId} = req.params;
 
-    if (!loggedIn) {
+    // make sure this user is authorized to edit this playlist
+    const belongsToThisUser = await checkUserOwnership(loggedIn, user_id, playlistId);
+
+    if (!loggedIn || !belongsToThisUser) {
         res.render('auth-failed', {loggedIn});
         return;
     }

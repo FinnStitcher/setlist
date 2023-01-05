@@ -667,11 +667,6 @@ hr {
   margin-bottom: 0.5rem;
 }
 
-.my-4 {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-
 .my-0 {
   margin-top: 0px;
   margin-bottom: 0px;
@@ -717,20 +712,12 @@ hr {
   display: block;
 }
 
-.inline-block {
-  display: inline-block;
-}
-
 .flex {
   display: flex;
 }
 
 .hidden {
   display: none;
-}
-
-.w-48 {
-  width: 12rem;
 }
 
 .w-3\/4 {
@@ -830,10 +817,6 @@ hr {
 .bg-stone-400 {
   --tw-bg-opacity: 1;
   background-color: rgb(168 162 158 / var(--tw-bg-opacity));
-}
-
-.p-2 {
-  padding: 0.5rem;
 }
 
 .p-1 {
