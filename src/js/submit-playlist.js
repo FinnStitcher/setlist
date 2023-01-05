@@ -15,14 +15,13 @@ async function formSubmitHandler(event) {
 	});
 
 	// create playlist object
-	// temporarily hardcoding for my acct
-	// later the username wll be added on the backend
+    // username added on the backend
 	const playlistObj = {
 		title: titleInputEl.value,
 		dateCreated: Date.now(),
 		dateLastModified: Date.now(),
 		songs: [...selectedSongIds],
-		username: '20firebird'
+		username: 'Anonymous'
 	};
 
 	// send fetch req to server

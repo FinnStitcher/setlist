@@ -82,6 +82,58 @@ const devController = {
             console.log(err);
             res.status(500).json(err);
         });
+    },
+
+    
+    devDeleteUser(req, res) {
+        console.log('devDeleteUser');
+        
+        const {authorization} = req.headers;
+        const isDev = checkDevAuth(authorization);
+        
+        if (!isDev) {
+            res.status(403).json({message: 'You are not authorized to use this endpoint.'});
+            return;
+        }
+
+        const userId = req.params.id;
+
+        User.findOneAndDelete(
+            {_id: userId}
+        )
+        .then(async dbRes => {
+            // user was not found
+            if (!dbRes) {
+                res.status(404).json({message: 'No user with that ID.'});
+                return;
+            }
+
+            console.log(dbRes);
+
+            // user was found
+            // delete playlists belonging to this user
+            const {username, playlists} = dbRes;
+
+            const playlistDelRes = await Playlist.deleteMany(
+                {_id: {
+                    $in: [...playlists]
+                }}
+            );
+
+            return {username, playlistDelRes}
+        })
+        .then(data => {
+            if (!data.playlistDelRes) {
+                res.status(500).json({message: 'User was deleted, but there was an error deleting playlists.'})
+            return;
+            }
+
+            res.json({message: `User ${data.username} has been deleted.`});
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        })
     }
 };
 

@@ -113,33 +113,6 @@ const userController = {
 
         // unauthorized
         res.status(401).end();
-    },
-
-    deleteUser(req, res) {
-        console.log('deleteUser');
-
-        const {id} = req.params;
-
-        User.findOneAndDelete(
-            {_id: id}
-        )
-        .then(dbRes => {
-            // user was not found
-            if (!dbRes) {
-                res.status(404).json({message: 'No user with that ID.'});
-                return;
-            }
-
-            // TODO: Delete all playlists associated w this user
-
-            // user was found
-            const {username} = dbRes;
-            res.json({message: `User ${username} was deleted successfully.`});
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json(err);
-        })
     }
 };
 

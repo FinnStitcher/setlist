@@ -1,4 +1,5 @@
 const {Playlist, User, Song} = require('../models');
+const {checkUserOwnership} = require('../utils/utils.js');
 
 const playlistController = {
     getAllPlaylists(req, res) {
@@ -35,7 +36,10 @@ const playlistController = {
         console.log('postPlaylist');
 
         const {body} = req;
-        const {user_id} = req.session;
+        const {user_id, username} = req.session;
+
+        // add username to playlist document
+        body.username = username;
 
         // confirm user is logged-in
         if (!user_id) {
@@ -77,15 +81,17 @@ const playlistController = {
         }
 
         // check that user owns this playlist
-        const belongsToUser = await User.findOne({
-            _id: user_id
-        })
-        .then(dbRes => {
-            // check if this pl is in the user's playlist array
-            return dbRes.playlists.indexOf(playlistId) !== -1;
-        });
+        // const belongsToThisUser = await User.findOne({
+        //     _id: user_id
+        // })
+        // .then(dbRes => {
+        //     // check if this pl is in the user's playlist array
+        //     return dbRes.playlists.indexOf(playlistId) !== -1;
+        // });
 
-        if (!belongsToUser) {
+        const belongsToThisUser = await checkUserOwnership(loggedIn, user_id, playlistId);
+
+        if (!belongsToThisUser) {
             res.status(403).json({messages: 'You can\'t edit someone else\'s playlist.'});
             return;
         }
@@ -127,16 +133,18 @@ const playlistController = {
             return;
         }
 
-        // check that user owns this playlist
-        const belongsToUser = await User.findOne({
-            _id: user_id
-        })
-        .then(dbRes => {
-            // check if this pl is in the user's playlist array
-            return dbRes.playlists.indexOf(playlistId) !== -1;
-        });
+        // // check that user owns this playlist
+        // const belongsToUser = await User.findOne({
+        //     _id: user_id
+        // })
+        // .then(dbRes => {
+        //     // check if this pl is in the user's playlist array
+        //     return dbRes.playlists.indexOf(playlistId) !== -1;
+        // });
+        
+        const belongsToThisUser = await checkUserOwnership(loggedIn, user_id, playlistId);
 
-        if (!belongsToUser) {
+        if (!belongsToThisUser) {
             res.status(403).json({messages: 'You can\'t delete someone else\'s playlist.'});
             return;
         }
@@ -172,96 +180,6 @@ const playlistController = {
             console.log(err);
             res.status(500).json(err);
         })
-    },
-
-    async addSongToPlaylist(req, res) {
-        console.log('addSongToPlaylist');
-
-        // destructure out values
-        const playlistId = req.params.id;
-        const {songId} = req.body;
-
-        // check that songId is valid
-        const songExists = await Song.findOne({
-            _id: songId
-        });
-
-        if (!songExists) {
-            res.status(400).json({message: 'No song with this ID.'});
-            return;
-        }
-
-        // works with single elements or arrays
-        Playlist.findOneAndUpdate(
-            {_id: playlistId},
-            {$addToSet: {songs: songId}},
-            {new: true}
-        )
-        .then(dbRes => {
-            if (!dbRes) {
-                res.status(404).json({message: 'Playlist not found.'});
-                return;
-            }
-
-            // update dateLastModified
-            return Playlist.findOneAndUpdate(
-                {_id: playlistId},
-                {dateLastModified: Date.now()},
-                {new: true}
-            );
-        })
-        .then(dbRes => {
-            if (!dbRes) {
-                res.status(500).json({message: 'Something went wrong.'});
-                return;
-            }
-
-            res.json(dbRes);
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json(err);
-        });
-    },
-
-    async removeSongFromPlaylist(req, res) {
-        console.log('removeSongFromPlaylist');
-
-        // destructure out values
-        const playlistId = req.params.id;
-        const {songId} = req.body;
-
-        // works with single elements or arrays
-        Playlist.findOneAndUpdate(
-			{ _id: playlistId },
-			{ $pull: { songs: { $in: songId } } },
-			{ new: true }
-		)
-        .then(dbRes => {
-            if (!dbRes) {
-                res.status(404).json({ message: 'Playlist not found.' });
-                return;
-            }
-
-            // update dateLastModified
-            return Playlist.findOneAndUpdate(
-                {_id: playlistId},
-                {dateLastModified: Date.now()},
-                {new: true}
-            );
-        })
-        .then(dbRes => {
-            if (!dbRes) {
-                res.status(500).json({message: 'Something went wrong.'});
-                return;
-            }
-
-            res.json(dbRes);
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json(err);
-        });
     }
 };
 

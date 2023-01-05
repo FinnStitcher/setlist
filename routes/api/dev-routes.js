@@ -4,10 +4,11 @@ const router = require('express').Router();
 
 const {
     devEditUser,
-    devEditPlaylist
+    devEditPlaylist,
+    devDeleteUser
 } = require('../../controllers/dev-controller');
 
-router.route('/users/:id').put(devEditUser);
+router.route('/users/:id').put(devEditUser).delete(devDeleteUser);
 router.route('/playlists/:id').put(devEditPlaylist);
 
 module.exports = router;
