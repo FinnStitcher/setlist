@@ -5,10 +5,11 @@ const router = require('express').Router();
 const {
     devEditUser,
     devEditPlaylist,
-    devDeleteUser
+    devDeleteUser,
+    devDeletePlaylist
 } = require('../../controllers/dev-controller');
 
 router.route('/users/:id').put(devEditUser).delete(devDeleteUser);
-router.route('/playlists/:id').put(devEditPlaylist);
+router.route('/playlists/:id').put(devEditPlaylist).delete(devDeletePlaylist);
 
 module.exports = router;

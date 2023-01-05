@@ -134,14 +134,6 @@ const playlistController = {
         }
 
         // // check that user owns this playlist
-        // const belongsToUser = await User.findOne({
-        //     _id: user_id
-        // })
-        // .then(dbRes => {
-        //     // check if this pl is in the user's playlist array
-        //     return dbRes.playlists.indexOf(playlistId) !== -1;
-        // });
-        
         const belongsToThisUser = await checkUserOwnership(loggedIn, user_id, playlistId);
 
         if (!belongsToThisUser) {

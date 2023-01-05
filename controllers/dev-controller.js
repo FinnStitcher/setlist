@@ -84,7 +84,6 @@ const devController = {
         });
     },
 
-    
     devDeleteUser(req, res) {
         console.log('devDeleteUser');
         
@@ -134,6 +133,53 @@ const devController = {
             console.log(err);
             res.status(500).json(err);
         })
+    },
+
+    devDeletePlaylist(req, res) {
+        console.log('devDeletePlaylist');
+        
+        const {authorization} = req.headers;
+        const isDev = checkDevAuth(authorization);
+        
+        if (!isDev) {
+            res.status(403).json({message: 'You are not authorized to use this endpoint.'});
+            return;
+        }
+
+        const playlistId = req.params.id;
+
+        Playlist.findOneAndDelete(
+            {_id: playlistId}
+        )
+        .then(dbRes => {
+            // check that a playlist was found
+            if (!dbRes) {
+                res.status(404).json({message: 'No playlist with that ID.'});
+                return;
+            }
+
+            // destructure out relevant data
+            const {_id, username} = dbRes;
+
+            return User.findOneAndUpdate(
+                {username: username},
+                {$pull: {playlists: _id}},
+                {new: true}
+            );
+        })
+        .then(dbRes => {
+            if (!dbRes) {
+                res.status(400).json({message: 'Playlist deleted, but user could not be found.'});
+                return;
+            }
+
+            res.json(dbRes);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        })
+
     }
 };
 
