@@ -28,7 +28,7 @@ const sessionObj = {
     }),
     cookie: {
         sameSite: true,
-        //secure: NODE_ENV === 'production',
+        secure: process.env.NODE_ENV === 'production',
         maxAge: parseInt(process.env.SESSION_LIFETIME)
     }
 };
