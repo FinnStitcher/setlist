@@ -73,10 +73,38 @@ const songController = {
         });
     },
 
+    exactMatchSong(req, res) {
+        console.log('exactMatchSong');
+
+        // looks for exact matches of title/artist combination
+
+        // destructure out query params
+        const {title, artist} = req.query;
+
+        // search
+        Song.findOne({
+            $and: [
+                {title: title},
+                {artist: artist}
+            ]
+        })
+        .lean()
+        .then(dbRes => res.json(dbRes))
+        .catch(err => {
+            console.log(err);
+            res.status(404).json(err);
+        });
+    },
+
     postSong(req, res) {
         console.log('postSong');
 
         const {title, artist, album, year} = req.body;
+
+        if (!title || !artist) {
+            res.status(400).json({message: 'Missing required info.'});
+            return;
+        }
 
         Song.create({
             title,

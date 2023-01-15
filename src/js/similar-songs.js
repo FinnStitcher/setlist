@@ -42,5 +42,5 @@ function printSong(element) {
     listEl.innerHTML = `<p class="font-medium">${title}</p>
     <p class="text-neutral-700 font-normal">${extraInfoString}</p>`;
 
-    suggestionContainerEl.appendChild(listEl);d
+    suggestionContainerEl.appendChild(listEl);
 };
