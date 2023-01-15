@@ -21,13 +21,47 @@ async function submitSongHandler(event) {
 
     // make sure both required fields are present
     if (!songObj.title || !songObj.artist) {
-        console.log('error');
+        console.log('missing required data');
+        // TODO: onscreen error message
         return;
     }
 
-    // TODO: check if there's a song in the db that *exactly* matches this title + artist
+    // check if there's a song in the db that *exactly* matches this title + artist
+    const exactMatchRes = await checkExactMatch(songObj);
+    const hasExactMatch = !!exactMatchRes;
 
-    const response = await fetch('/api/songs', {
+    if (hasExactMatch) {
+        // check if this submission has more data than the one in the database
+        const hasNewAlbumData = !!(songObj.album && !exactMatchRes.album);
+        const hasNewYearData = !!(songObj.year && !exactMatchRes.year);
+
+        if (!hasNewAlbumData && !hasNewYearData) {
+            // TODO: display 'did nothing' message
+            return;
+        }
+
+        const updateRes = await fetch('/api/songs', {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(songObj)
+        });
+        // no .then because we don't need the response data
+
+        if (updateRes.ok) {
+            // TODO: confirm update before redirect
+            window.location.assign('/playlists');
+        } else {
+            // TODO: display error
+            console.log('error in attempted update');
+        }
+
+        return;
+    }
+
+    const createRes = await fetch('/api/songs', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -35,10 +69,14 @@ async function submitSongHandler(event) {
         },
         body: JSON.stringify(songObj)
     });
+    // no .then because we don't need the response data
 
-    if (response.ok) {
+    if (createRes.ok) {
         // TODO: confirm submit before redirect
         window.location.assign('/playlists');
+    } else {
+        // TODO: display error
+        console.log('error in attempted submit');
     }
 };
 
@@ -49,5 +87,7 @@ async function checkExactMatch(songObj) {
     songObj.title ? queryString += `title=${titleInputEl.value}&` : null;
     songObj.artist ? queryString += `artist=${artistInputEl.value}` : null;
 
-    const response = await fetch('/api/songs/match/exact')
+    const response = await fetch('/api/songs/match/exact' + queryString).then(dbRes => dbRes.json());
+    
+    return response;
 };

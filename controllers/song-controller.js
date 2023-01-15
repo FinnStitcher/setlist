@@ -117,6 +117,29 @@ const songController = {
             console.log(err);
             res.status(400).json(err);
         });
+    },
+
+    putSong(req, res) {
+        console.log('putSong');
+
+        const {_id, title, artist, album, year} = req.body;
+
+        if (!_id || !title || !artist) {
+            res.status(400).json({message: 'Missing required info.'});
+            return;
+        }
+
+        Song.findOneAndUpdate({
+            _id: _id
+        }, {
+            album: album ? album : null,
+            year: year ? year : null
+        }, {new: true})
+        .then(dbRes => res.json(dbRes))
+        .catch(err => {
+            console.log(err);
+            res.status(400).json(err);
+        });
     }
 };
 
