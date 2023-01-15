@@ -40,7 +40,7 @@ async function submitSongHandler(event) {
             return;
         }
 
-        const updateRes = await fetch('/api/songs', {
+        const updateRes = await fetch('/api/songs/' + exactMatchRes._id, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
@@ -56,6 +56,7 @@ async function submitSongHandler(event) {
         } else {
             // TODO: display error
             console.log('error in attempted update');
+            console.log(updateRes.status);
         }
 
         return;
@@ -77,6 +78,7 @@ async function submitSongHandler(event) {
     } else {
         // TODO: display error
         console.log('error in attempted submit');
+        console.log(updateRes.status);
     }
 };
 
@@ -88,6 +90,10 @@ async function checkExactMatch(songObj) {
     songObj.artist ? queryString += `artist=${artistInputEl.value}` : null;
 
     const response = await fetch('/api/songs/match/exact' + queryString).then(dbRes => dbRes.json());
+
+    if (!response.ok) {
+        console.log(response.status);
+    }
     
     return response;
 };

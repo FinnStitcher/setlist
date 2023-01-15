@@ -122,15 +122,16 @@ const songController = {
     putSong(req, res) {
         console.log('putSong');
 
-        const {_id, title, artist, album, year} = req.body;
+        const {id} = req.params;
+        const {title, artist, album, year} = req.body;
 
-        if (!_id || !title || !artist) {
+        if (!title || !artist) {
             res.status(400).json({message: 'Missing required info.'});
             return;
         }
 
         Song.findOneAndUpdate({
-            _id: _id
+            _id: id
         }, {
             album: album ? album : null,
             year: year ? year : null
