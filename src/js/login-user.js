@@ -4,8 +4,12 @@ const passwordInputEl = document.getElementById('password');
 
 const loginModal = document.getElementById('login-modal');
 const loginModalCloseBtn = document.getElementById('login-modal-close-btn');
+const modalText = document.querySelector('#login-modal p');
 
-formEl.addEventListener('submit', loginHandler);
+function displayModal(message) {
+    modalText.textContent = message;
+    loginModal.showModal();
+};
 
 async function loginHandler(event) {
     event.preventDefault();
@@ -13,30 +17,35 @@ async function loginHandler(event) {
     const username = usernameInputEl.value.trim();
     const password = passwordInputEl.value.trim();
 
-    if (username && password) {
-        const response = await fetch('/api/users/login', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({username, password})
-        });
+    // check that both fields are filled
+    if (!username || !password) {
+        displayModal('Please fill out both input boxes and try again.');
+        return;
+    }
 
-        if (response.ok) {
-            loginModal.showModal();
+    const response = await fetch('/api/users/login', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({username, password})
+    });
 
-            setTimeout(() => {
-                window.location.assign('/playlists');
-            }, 2000);
-        } else {
-            const modalText = document.querySelector('dialog p');
-            modalText.textContent = 'Something went wrong with your log-in. Check your info and try again.';
+    if (response.ok) {
+        displayModal("You're logged in. Redirecting you now...");
 
-            loginModal.showModal();
-        }
+        setTimeout(() => {
+            window.location.assign('/playlists');
+        }, 1800);
+    } else {
+        const {message} = await response.json();
+
+        displayModal(message);
     }
 };
+
+formEl.addEventListener('submit', loginHandler);
 
 loginModalCloseBtn.addEventListener('click', () => {
     loginModal.close();

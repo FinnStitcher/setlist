@@ -6,23 +6,29 @@ router.get('/users/:id', async (req, res) => {
     const {id: userId} = req.params;
 
     // using .lean() so data can be fed into handlebars
-    const userData = await User.findOne({
-        _id: userId
-    })
-    .lean()
-    .select('-password -__v')
-    .populate({
-        path: 'playlists',
-        select: '-__v -username',
-        populate: {path: 'songs'}
-    })
-    .then(dbRes => dbRes)
-    .catch(err => err);
+    try {
+        const userData = await User.findOne({
+            _id: userId
+        })
+        .lean()
+        .select('-password -__v')
+        .populate({
+            path: 'playlists',
+            select: '-__v -username',
+            populate: {path: 'songs'}
+        });
 
-    // check if this user is viewing their own profile
-    let belongsToThisUser = loggedIn && userData._id.toString() === userId;
+        // check if this user is viewing their own profile
+        let belongsToThisUser = loggedIn && userData._id.toString() === userId;
 
-    res.render('user', {userData, belongsToThisUser, loggedIn});
+        res.render('user', {userData, belongsToThisUser, loggedIn});
+    } catch (err) {
+        res.status(404);
+
+        const errorMessage = 'User not found.';
+        res.render('error', {errorMessage, loggedIn});
+    }
+
 });
 
 router.get('/login', (req, res) => {

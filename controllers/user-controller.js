@@ -3,41 +3,53 @@ const {User} = require('../models');
 require('dotenv').config();
 
 const userController = {
-    getAllUsers(req, res) {
-        User.find({})
-        .select('-__v')
-        .then(dbRes => res.json(dbRes))
-        .catch(err => {
+    async getAllUsers(req, res) {
+        try {
+            const dbRes = await User.find({}).select('-__v');
+            res.status(200).json(dbRes);
+        } catch (err) {
+            // catch server errors
             console.log(err);
             res.status(500).json(err);
-        });
+        }
     },
 
-    getOneUser(req, res) {
+    async getOneUser(req, res) {
         const searchTerm = req.params.id;
 
-        User.findOne({
-            _id: searchTerm
-        })
-        .populate({
-            path: 'playlists',
-            select: '-__v -username'
-        })
-        .then(dbRes => res.json(dbRes))
-        .catch(err => {
+        try {
+            const dbRes = await User.findOne({
+                _id: searchTerm
+            })
+            .populate({
+                path: 'playlists',
+                select: '-__v -username'
+            });
+
+            // user was not found
+            if (!dbRes) {
+                res.status(404).json({message: 'User not found.'});
+                return;
+            }
+
+            res.status(200).json(dbRes);
+        } catch (err) {
+            // catch server errors
             console.log(err);
-            res.status(404).json(err);
-        });
+            res.status(500).json(err);
+        }
     },
 
-    postUser(req, res) {
+    async postUser(req, res) {
         const {username, password} = req.body;
 
-        User.create({
-            username,
-            password
-        })
-        .then(dbRes => {
+        try {
+            const dbRes = await User.create({
+                username,
+                password
+            });
+
+            // add user data to session
             req.session.save(() => {
                 req.session.user_id = dbRes._id;
                 req.session.username = dbRes.username;
@@ -49,27 +61,28 @@ const userController = {
                     message: 'You\'re logged in.'
                 });
             });
-        })
-        .catch(err => {
+        } catch (err) {
+            // catch server errors
             console.log(err);
-            res.status(400).json(err);
-        });
+            res.status(500).json(err);
+        }
     },
 
-    loginUser(req, res) {
+    async loginUser(req, res) {
         const {username, password} = req.body;
-        
-        // check if user actually exists
-        User.findOne({
-            username: username
-        })
-        .then(async dbRes => {
+
+        try {
+            // check if this user exists
+            const dbRes = await User.findOne({
+                username: username
+            });
+
             // user does not exist
             if (!dbRes) {
                 res.status(404).json({message: 'No user with that username.'});
                 return;
             }
-            
+
             // user does exist
             // check if password is valid
             const isPassValid = await dbRes.comparePassword(password);
@@ -79,7 +92,8 @@ const userController = {
                 return;
             }
 
-            // add user data to the session
+            // password was valid
+            // add user data to session
             await req.session.save(() => {
                 req.session.user_id = dbRes._id.toString();
                 req.session.username = dbRes.username;
@@ -91,11 +105,11 @@ const userController = {
                     message: 'You\'re logged in.'
                 });
             });
-        })
-        .catch(err => {
+        } catch (err) {
+            // catch server errors
             console.log(err);
             res.status(500).json(err);
-        });
+        }
     },
 
     logoutUser(req, res) {
@@ -108,7 +122,7 @@ const userController = {
 
                 res.clearCookie(process.env.SESSION_NAME);
                 res.status(204).end();
-            })
+            });
             return;
         }
 

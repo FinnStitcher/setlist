@@ -4,8 +4,12 @@ const passwordInputEl = document.getElementById('password');
 
 const signupModal = document.getElementById('signup-modal');
 const signupModalCloseBtn = document.getElementById('signup-modal-close-btn');
+const modalText = document.querySelector('#signup-modal p');
 
-formEl.addEventListener('submit', signupHandler);
+function displayModal(message) {
+    modalText.textContent = message;
+    signupModal.showModal();
+};
 
 async function signupHandler(event) {
     event.preventDefault();
@@ -13,30 +17,35 @@ async function signupHandler(event) {
     const username = usernameInputEl.value.trim();
     const password = passwordInputEl.value.trim();
 
-    if (username && password) {
-        const response = await fetch('/api/users', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({username, password})
-        });
+    // check that both fields are filled
+    if (!username || !password) {
+        displayModal('Please fill out both input boxes and try again.');
+        return;
+    }
 
-        if (response.ok) {
-            signupModal.showModal();
+    const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({username, password})
+    });
 
-            setTimeout(() => {
-                window.location.assign('/playlists')
-            }, 3000);
-        } else {
-            const modalText = document.querySelector('dialog p');
-            modalText.textContent = 'Something went wrong with signing you up. Most likely, something is wrong with the server, but double-check that your input is valid.';
+    if (response.ok) {
+        displayModal("Congratulations on your new Setlist account! You're logged in. Redirecting...");
 
-            signupModal.showModal();
-        }
+        setTimeout(() => {
+            window.location.assign('/playlists')
+        }, 3000);
+    } else {
+        const {message} = await response.json();
+
+        displayModal(message);
     }
 };
+
+formEl.addEventListener('submit', signupHandler);
 
 signupModalCloseBtn.addEventListener('click', () => {
     signupModal.close();

@@ -6,7 +6,7 @@ function logoutHandler() {
     // TODO: are you sure you want to log out?
 
     fetch('/api/users/logout', {
-        method: 'POST'
+        method: 'DELETE'
     })
     .then(response => {
         // TODO: warn of redirect
