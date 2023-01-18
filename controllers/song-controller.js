@@ -2,8 +2,6 @@ const {Song} = require('../models');
 
 const songController = {
     getAllSongs(req, res) {
-        console.log('getAllSongs');
-
         Song.find({})
         .select('-__v')
         .then(dbRes => res.json(dbRes))
@@ -14,8 +12,6 @@ const songController = {
     },
     
     getOneSong(req, res) {
-        console.log('getOneSong');
-
         const searchTerm = req.params.id;
 
         Song.findOne({
@@ -30,8 +26,6 @@ const songController = {
     },
 
     searchSongs(req, res) {
-        console.log('searchSongs');
-
         const searchTerm = req.params.search;
         // convert searchTerm into a regexp
         // requires a word boundary at the start of the search term
@@ -50,8 +44,6 @@ const songController = {
     },
 
     matchSongs(req, res) {
-        console.log('matchSongs');
-
         // runs on the submit a song page
         // returns songs that the user might be typing in a duplicate of
 
@@ -74,8 +66,6 @@ const songController = {
     },
 
     postSong(req, res) {
-        console.log('postSong');
-
         const {title, artist, album, year} = req.body;
 
         Song.create({

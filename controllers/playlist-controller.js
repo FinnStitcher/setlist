@@ -3,8 +3,6 @@ const {checkUserOwnership} = require('../utils/utils.js');
 
 const playlistController = {
     getAllPlaylists(req, res) {
-        console.log('getAllPlaylists');
-
         Playlist.find({})
         .then(dbRes => res.json(dbRes))
         .catch(err => {
@@ -14,8 +12,6 @@ const playlistController = {
     },
 
     getOnePlaylist(req, res) {
-        console.log('getOnePlaylist');
-
         const searchTerm = req.params.id;
 
         Playlist.findOne({
@@ -33,8 +29,6 @@ const playlistController = {
     },
 
     async postPlaylist(req, res) {
-        console.log('postPlaylist');
-
         const {title, dateCreated, dateLastModified, songs} = req.body;
         const {user_id, username} = req.session;
 
@@ -71,8 +65,6 @@ const playlistController = {
     },
 
     async editPlaylist(req, res) {
-        console.log('editPlaylist');
-
         const playlistId = req.params.id;
         const {title, dateLastModified, songs} = req.body;
         const {loggedIn, user_id} = req.session;
@@ -117,8 +109,6 @@ const playlistController = {
     },
 
     async deletePlaylist(req, res) {
-        console.log('deletePlaylist');
-
         const playlistId = req.params.id;
         const {loggedIn, user_id} = req.session;
 

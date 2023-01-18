@@ -4,8 +4,6 @@ require('dotenv').config();
 
 const userController = {
     getAllUsers(req, res) {
-        console.log('getAllUsers');
-
         User.find({})
         .select('-__v')
         .then(dbRes => res.json(dbRes))
@@ -16,8 +14,6 @@ const userController = {
     },
 
     getOneUser(req, res) {
-        console.log('getOneUser');
-
         const searchTerm = req.params.id;
 
         User.findOne({
@@ -35,8 +31,6 @@ const userController = {
     },
 
     postUser(req, res) {
-        console.log('postUser');
-
         const {username, password} = req.body;
 
         User.create({
@@ -63,8 +57,6 @@ const userController = {
     },
 
     loginUser(req, res) {
-        console.log('loginUser');
-
         const {username, password} = req.body;
         
         // check if user actually exists
@@ -107,8 +99,6 @@ const userController = {
     },
 
     logoutUser(req, res) {
-        console.log('logoutUser');
-
         // if logged in, destroy session
         if (req.session.loggedIn) {
             req.session.destroy((err) => {

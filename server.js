@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const path = require('path');
 
+const morgan = require('morgan');
+
 const routes = require('./routes');
 
 const exphbs = require('express-handlebars');
@@ -32,6 +34,8 @@ const sessionObj = {
         maxAge: parseInt(process.env.SESSION_LIFETIME)
     }
 };
+
+app.use(morgan('dev'));
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));

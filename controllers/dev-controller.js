@@ -16,8 +16,6 @@ function checkDevAuth(key) {
 const devController = {
     // make any edit to a user
     devEditUser(req, res) {
-        console.log('devEditUser');
-
         const {authorization} = req.headers;
         const isDev = checkDevAuth(authorization);
         
@@ -51,8 +49,6 @@ const devController = {
 
     // make any edit to a playlist
     devEditPlaylist(req, res) {
-        console.log('devEditPlaylist');
-        
         const {authorization} = req.headers;
         const isDev = checkDevAuth(authorization);
         
@@ -85,8 +81,6 @@ const devController = {
     },
 
     devDeleteUser(req, res) {
-        console.log('devDeleteUser');
-        
         const {authorization} = req.headers;
         const isDev = checkDevAuth(authorization);
         
@@ -136,8 +130,6 @@ const devController = {
     },
 
     devDeletePlaylist(req, res) {
-        console.log('devDeletePlaylist');
-        
         const {authorization} = req.headers;
         const isDev = checkDevAuth(authorization);
         
