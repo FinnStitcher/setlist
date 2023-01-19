@@ -38,30 +38,41 @@ const playlistController = {
             return;
         }
 
-        Playlist.create({
-            title,
-            dateCreated,
-            dateLastModified,
-            songs,
-            username
-        })
-        .then(dbRes => {
-            // destructure out playlist id
-            const {_id} = dbRes;
+        try {
+            const playlistDbRes = await Playlist.create({
+                title,
+                dateCreated,
+                dateLastModified,
+                songs,
+                username
+            });
+
+            const {_id} = playlistDbRes;
 
             // update relevant user profile
-            return User.findOneAndUpdate(
+            const userDbRes = await User.findOneAndUpdate(
                 {_id: user_id},
                 {$push: {playlists: _id}},
                 {new: true}
             )
             .populate('playlists');
-        })
-        .then(dbRes => res.json(dbRes))
-        .catch(err => {
+
+            res.status(200).json(userDbRes);
+        } catch (err) {
+            // catch errors
             console.log(err);
-            res.status(400).json(err);
-        });
+
+            if (err.name === 'ValidatorError') {
+                res.status(400).json({
+                    err,
+                    message: 'A title is required.'
+                });
+                return;
+            }
+
+            // generic error
+            res.status(500).json(err);
+        }
     },
 
     async editPlaylist(req, res) {

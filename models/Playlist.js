@@ -1,4 +1,5 @@
 const {Schema, model} = require('mongoose');
+const MongooseErrors = require('mongoose-errors');
 
 const PlaylistSchema = new Schema(
     {

@@ -1,29 +1,48 @@
 const formEl = document.getElementById('playlist-form');
 const titleInputEl = document.getElementById('playlist-name');
-const selectedSongEls = document.querySelectorAll('#selected-songs li');
 
-// will store ids of songs
-// needs to be declared out here to avoid scoping issue with selectedSongEls
-const selectedIds = [];
+const playlistModal = document.getElementById('pl-modal');
+const playlistModalCloseBtn = document.getElementById('pl-modal-close-btn');
+const modalText = document.querySelector('#pl-modal p');
 
-const urlArray = window.location.toString().split('/');
-const playlistId = urlArray[urlArray.length - 1];
-console.log(playlistId);
+function displayModal(message) {
+    modalText.textContent = message;
+    playlistModal.showModal();
+};
 
 async function formSubmitHandler(event) {
 	event.preventDefault();
 
+    const title = titleInputEl.value;
+
+    // check that title is present
+    if (!title) {
+        displayModal('A title is required.');
+        return;
+    }
+
+    // extract ids of these lis
+    // having this variable declared in global scope makes the list inaccessible in here
+    // unsure why
+    const selectedSongEls = document.querySelectorAll('#selected-songs li');
+    const selectedSongIds = [];
+
+    // go through list, extract ids, put them in selectedSongIds
 	selectedSongEls.forEach(element => {
 		const id = element.getAttribute('data-id');
-		selectedIds.push(id);
+		selectedSongIds.push(id);
 	});
 
 	// create playlist object
 	const playlistObj = {
-		title: titleInputEl.value,
+		title: title,
 		dateLastModified: Date.now(),
 		songs: [...selectedSongIds]
 	};
+
+    // get playlist id
+    const urlArray = window.location.toString().split('/');
+    const playlistId = urlArray[urlArray.length - 1];
 
 	// send fetch req to server
 	const response = await fetch('/api/playlists/' + playlistId, {
@@ -36,9 +55,16 @@ async function formSubmitHandler(event) {
 	});
     
     if (response.ok) {
-        // TODO: confirm submit and redirect
-        window.location.assign('/playlists');
+        displayModal('Your playlist has been updated! Redirecting...');
+
+        setTimeout(() => {
+            window.location.assign('/playlists')
+        }, 2000);
+    } else {
+        const {message} = await response.json();
+
+        displayModal(message);
     }
-}
+};
 
 formEl.addEventListener('submit', formSubmitHandler);
