@@ -33,7 +33,7 @@ const songController = {
     },
 
     async searchSongs(req, res) {
-        // used in search-select-songs.js, on create-playlist and edit-playlist pages
+        // used on create-playlist and edit-playlist pages
 
         const searchTerm = req.params.search;
         // convert searchTerm into a regexp
