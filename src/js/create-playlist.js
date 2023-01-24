@@ -99,15 +99,20 @@ async function songSearchInputHandler() {
 };
 
 function printSong(element) {
-    // TODO: print more info
-    // might need to introduce jquery
-    const {_id, title, artist} = element;
+    const {title, artist, year, album} = element;
 
-    const songEl = document.createElement('li');
-    songEl.textContent = `${title} - ${artist}`;
-    songEl.setAttribute('data-id', _id);
+    // format artist, year, and album into a string
+    let extraInfoString = artist;
+    year ? extraInfoString += `, ${year}` : null;
+    album ? extraInfoString += `, <i>${album}</i>` : null;
 
-    searchResultsContainerEl.appendChild(songEl);
+    const listEl = document.createElement('li');
+    listEl.setAttribute('class', 'my-0');
+
+    listEl.innerHTML = `<p class="font-medium">${title}</p>
+    <p class="text-neutral-700 font-normal">${extraInfoString}</p>`;
+
+    suggestionContainerEl.appendChild(listEl);
 };
 
 function printNoResultsMessage() {

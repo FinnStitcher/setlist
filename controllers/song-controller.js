@@ -95,8 +95,8 @@ const songController = {
             const songDbRes = await Song.create({
                 title,
                 artist,
-                album: album ? album : null,
-                year: year ? year : null
+                album,
+                year
             });
 
             res.status(200).json(songDbRes);
