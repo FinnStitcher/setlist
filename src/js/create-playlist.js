@@ -99,7 +99,7 @@ async function songSearchInputHandler() {
 };
 
 function printSong(element) {
-    const {title, artist, year, album} = element;
+    const {_id, title, artist, year, album} = element;
 
     // format artist, year, and album into a string
     let extraInfoString = artist;
@@ -108,11 +108,12 @@ function printSong(element) {
 
     const listEl = document.createElement('li');
     listEl.setAttribute('class', 'my-0');
+    listEl.setAttribute('data-id', _id);
 
     listEl.innerHTML = `<p class="font-medium">${title}</p>
     <p class="text-neutral-700 font-normal">${extraInfoString}</p>`;
 
-    suggestionContainerEl.appendChild(listEl);
+    searchResultsContainerEl.appendChild(listEl);
 };
 
 function printNoResultsMessage() {
@@ -125,42 +126,50 @@ function printNoResultsMessage() {
 function songSelectHandler(event) {
     const {target} = event;
 
-    const isLi = target.matches('li');
+    const isLi = target.matches('li') || target.matches('li p') || target.matches('li p i');
 
     if (!isLi) {
         return;
     }
 
-    // check if there's a match in selectedSongsForSearch
-    const targetId = target.getAttribute('data-id');
+    // streamlining the code by storing the relevant list item in a variable
+    // this way, if the user clicked one of the paragraph tags,
+    // we don't need a different set of logic
+    const listItemEl = target.matches('li') ? target : target.closest('li');
+
+    // check if there's a match in selectedSongIds
+    const targetId = listItemEl.getAttribute('data-id');
     const isAlreadySelected = selectedSongIds.indexOf(targetId) !== -1;
 
     // remove the target from the dom
     // this way you can't put a song in a playlist twice
     if (isAlreadySelected) {
-        target.remove();
+        listItemEl.remove();
         return;
     }
 
     // else, add it to the selection
     selectedSongIds.push(targetId);
-    selectedContainerEl.appendChild(target);
+    selectedContainerEl.appendChild(listItemEl);
 };
 
 function songDeselectHandler(event) {
     const {target} = event;
     
-    const isLi = target.matches('li');
+    const isLi = target.matches('li') || target.matches('li p') || target.matches('li p i');
 
     if (!isLi) {
         return;
     }
 
+    // see comments in songSelectHandler
+    const listItemEl = target.matches('li') ? target : target.closest('li');
+
     const searchTerm = songSearchInputEl.value;
     const searchRegex = new RegExp('\\b' + searchTerm, 'i');
 
-    const songTitle = target.textContent.split(' - ')[0].trim();
-    const songId = target.getAttribute('data-id');
+    const songTitle = listItemEl.children[0].textContent.trim();
+    const songId = listItemEl.getAttribute('data-id');
 
     // check if this song can appear in the current search
     if (searchTerm && searchRegex.test(songTitle)) {
@@ -169,14 +178,14 @@ function songDeselectHandler(event) {
 
         // this song is in the search results (already in the dom), so we can just delete it
         if (isInSearchResults) {
-            target.remove();
+            listItemEl.remove();
         } else {
             // move this song to the search results container
-            searchResultsContainerEl.appendChild(target);
+            searchResultsContainerEl.appendChild(listItemEl);
         }
     } else {
         // song cannot appear in current search, so we delete it
-        target.remove();
+        listItemEl.remove();
     }
 
     // remove from selectedSongsForSearch
