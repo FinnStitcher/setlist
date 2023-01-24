@@ -1,49 +1,65 @@
 const {Song} = require('../models');
 
 const songController = {
-    getAllSongs(req, res) {
-        Song.find({})
-        .select('-__v')
-        .then(dbRes => res.json(dbRes))
-        .catch(err => {
+    async getAllSongs(req, res) {
+        try {
+            const songDbRes = await Song.find({});
+
+            res.status(200).json(songDbRes);
+        } catch (err) {
             console.log(err);
             res.status(500).json(err);
-        });
+        }
     },
     
-    getOneSong(req, res) {
+    async getOneSong(req, res) {
         const searchTerm = req.params.id;
 
-        Song.findOne({
-            _id: searchTerm
-        })
-        .select('-__v')
-        .then(dbRes => res.json(dbRes))
-        .catch(err => {
+        try {
+            const songDbRes = await Song.findOne({
+                _id: searchTerm
+            });
+
+            if (!songDbRes) {
+                res.status(404).json({ message: 'No song with that ID.' });
+                return;
+            }
+
+            res.status(200).jsoN(songDbRes);
+        } catch (err) {
             console.log(err);
-            res.status(404).json(err);
-        });
+            res.status(500).json(err);
+        }
     },
 
-    searchSongs(req, res) {
+    async searchSongs(req, res) {
+        // used in search-select-songs.js, on create-playlist and edit-playlist pages
+
         const searchTerm = req.params.search;
         // convert searchTerm into a regexp
         // requires a word boundary at the start of the search term
         const searchRegex = new RegExp('\\b' + searchTerm, 'i');
         
-        Song.find({
-            title: searchRegex
-        })
-        .lean()
-        .select('title artist _id')
-        .then(dbRes => res.json(dbRes))
-        .catch(err => {
+        try {
+            const songDbRes = await Song.find({
+                title: searchRegex
+            });
+
+            if (!songDbRes) {
+                // status 204 because the search turning up nothing is an expected and acceptable result
+                // frontend will tell the user there was nothing
+                res.status(204);
+                return;
+            }
+
+            res.status(200).json(songDbRes);
+        } catch (err) {
             console.log(err);
-            res.status(404).json(err);
-        });
+            res.status(500).json(err);
+        }
     },
 
-    matchSongs(req, res) {
+    async matchSongs(req, res) {
         // runs on the submit a song page
         // returns songs that the user might be typing in a duplicate of
 
@@ -51,34 +67,43 @@ const songController = {
         const titleRegex = req.query.title ? new RegExp('\\b' + req.query.title, 'i') : new RegExp('.');
         const artistRegex = req.query.artist ? new RegExp('\\b' + req.query.artist, 'i') : new RegExp('.');
 
-        Song.find({
-            $and: [
-                {title: titleRegex},
-                {artist: artistRegex}
-            ]
-        })
-        .lean()
-        .then(dbRes => res.json(dbRes))
-        .catch(err => {
+        try {
+            const songDbRes = await Song.find({
+                $and: [
+                    {title: titleRegex},
+                    {artist: artistRegex}
+                ]
+            });
+
+            if (!songDbRes) {
+                // see rationale in searchSongs()
+                res.status(204);
+                return;
+            }
+
+            res.status(200).json(songDbRes);
+        } catch (err) {
             console.log(err);
-            res.status(404).json(err);
-        });
+            res.status(500).json(err);
+        }
     },
 
-    postSong(req, res) {
+    async postSong(req, res) {
         const {title, artist, album, year} = req.body;
 
-        Song.create({
-            title,
-            artist,
-            album: album? album : null,
-            year: year? year : null
-        })
-        .then(dbRes => res.json(dbRes))
-        .catch(err => {
+        try {
+            const songDbRes = await Song.create({
+                title,
+                artist,
+                album: album ? album : null,
+                year: year ? year : null
+            });
+
+            res.status(200).json(songDbRes);
+        } catch (err) {
             console.log(err);
-            res.status(400).json(err);
-        });
+            res.status(500).json(err);
+        }
     }
 };
 
