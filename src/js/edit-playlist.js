@@ -1,4 +1,4 @@
-// array for the ids of songs that will be added to the playlist
+// array for the ids of songs in the playlist
 const selectedSongIds = [];
 
 // PLAYLIST FORM CODE
@@ -12,12 +12,15 @@ async function formSubmitHandler(event) {
 
     // check that title is present
     if (!title) {
-        displayModal('You need to add a title.');
+        displayModal('A title is required.');
         return;
     }
 
-    // get list items
+    // extract ids of these lis
+    // having this variable declared in global scope makes the list inaccessible in here
+    // unsure why
     const selectedSongEls = document.querySelectorAll('#selected-songs li');
+    const selectedSongIds = [];
 
     // go through list, extract ids, put them in selectedSongIds
 	selectedSongEls.forEach(element => {
@@ -28,15 +31,17 @@ async function formSubmitHandler(event) {
 	// create playlist object
 	const playlistObj = {
 		title: title,
-		dateCreated: Date.now(),
 		dateLastModified: Date.now(),
-		songs: [...selectedSongIds],
-		username: 'Anonymous' // dummy value, should be overwritten on the backend
+		songs: [...selectedSongIds]
 	};
 
-	// send req to server
-	const response = await fetch('/api/playlists', {
-		method: 'POST',
+    // get playlist id
+    const urlArray = window.location.toString().split('/');
+    const playlistId = urlArray[urlArray.length - 1];
+
+	// send fetch req to server
+	const response = await fetch('/api/playlists/' + playlistId, {
+		method: 'PUT',
 		headers: {
 			Accept: 'application/json',
 			'Content-Type': 'application/json'
@@ -45,7 +50,7 @@ async function formSubmitHandler(event) {
 	});
     
     if (response.ok) {
-        displayModal('Your playlist was successfully created! Redirecting...');
+        displayModal('Your playlist has been updated! Redirecting...');
 
         setTimeout(() => {
             window.location.assign('/playlists')
@@ -58,6 +63,7 @@ async function formSubmitHandler(event) {
 };
 
 formEl.addEventListener('submit', formSubmitHandler);
+
 // END PLAYLIST FORM CODE
 
 // SONG SEARCH CODE
@@ -198,8 +204,4 @@ function displayModal(message) {
     modalText.textContent = message;
     playlistModal.showModal();
 };
-
-playlistModalCloseBtn.addEventListener('click', () => {
-    playlistModal.close();
-});
 // END MODAL CODE
