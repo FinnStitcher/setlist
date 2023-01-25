@@ -1,3 +1,5 @@
+import {printSong, printNoResultsMessage, songSelectHandler, songDeselectHandler} from './client-utils.js';
+
 // array for the ids of songs in the playlist
 const selectedSongIds = [];
 
@@ -15,18 +17,6 @@ async function formSubmitHandler(event) {
         displayModal('A title is required.');
         return;
     }
-
-    // extract ids of these lis
-    // having this variable declared in global scope makes the list inaccessible in here
-    // unsure why
-    const selectedSongEls = document.querySelectorAll('#selected-songs li');
-    const selectedSongIds = [];
-
-    // go through list, extract ids, put them in selectedSongIds
-	selectedSongEls.forEach(element => {
-		const id = element.getAttribute('data-id');
-		selectedSongIds.push(id);
-	});
 
 	// create playlist object
 	const playlistObj = {
@@ -63,7 +53,6 @@ async function formSubmitHandler(event) {
 };
 
 formEl.addEventListener('submit', formSubmitHandler);
-
 // END PLAYLIST FORM CODE
 
 // SONG SEARCH CODE
@@ -94,119 +83,28 @@ async function songSearchInputHandler() {
     // if no songs were returned, print message
     // songs will be an array, so we need to specifically check if there's no first array item
     if (!songs[0]) {
-        printNoResultsMessage();
+        printNoResultsMessage(searchResultsContainerEl);
         return;
     }
 
     // else, print out the songs
-    songs.forEach(element => printSong(element));
+    songs.forEach(element => printSong(element, searchResultsContainerEl));
 
     // TODO: extra processing to not print songs that are already on this playlist
-};
-
-function printSong(element) {
-    const {_id, title, artist, year, album} = element;
-
-    // format artist, year, and album into a string
-    let extraInfoString = artist;
-    year ? extraInfoString += `, ${year}` : null;
-    album ? extraInfoString += `, <i>${album}</i>` : null;
-
-    const listEl = document.createElement('li');
-    listEl.setAttribute('class', 'my-0');
-    listEl.setAttribute('data-id', _id);
-
-    listEl.innerHTML = `<p class="font-medium">${title}</p>
-    <p class="text-neutral-700 font-normal">${extraInfoString}</p>`;
-
-    searchResultsContainerEl.appendChild(listEl);
-};
-
-function printNoResultsMessage() {
-    const messageEl = document.createElement('p');
-    messageEl.textContent = 'No songs matching your search were found.';
-
-    searchResultsContainerEl.appendChild(messageEl);
-};
-
-function songSelectHandler(event) {
-    const {target} = event;
-
-    const isLi = target.matches('li') || target.matches('li p') || target.matches('li p i');
-
-    if (!isLi) {
-        return;
-    }
-
-    // streamlining the code by storing the relevant list item in a variable
-    // this way, if the user clicked one of the paragraph tags,
-    // we don't need a different set of logic
-    const listItemEl = target.matches('li') ? target : target.closest('li');
-
-    // check if there's a match in selectedSongIds
-    const targetId = listItemEl.getAttribute('data-id');
-    const isAlreadySelected = selectedSongIds.indexOf(targetId) !== -1;
-
-    // remove the target from the dom
-    // this way you can't put a song in a playlist twice
-    if (isAlreadySelected) {
-        listItemEl.remove();
-        return;
-    }
-
-    // else, add it to the selection
-    selectedSongIds.push(targetId);
-    selectedContainerEl.appendChild(listItemEl);
-};
-
-function songDeselectHandler(event) {
-    const {target} = event;
-    
-    const isLi = target.matches('li') || target.matches('li p') || target.matches('li p i');
-
-    if (!isLi) {
-        return;
-    }
-
-    // see comments in songSelectHandler
-    const listItemEl = target.matches('li') ? target : target.closest('li');
-
-    const searchTerm = songSearchInputEl.value;
-    const searchRegex = new RegExp('\\b' + searchTerm, 'i');
-
-    const songTitle = listItemEl.children[0].textContent.trim();
-    const songId = listItemEl.getAttribute('data-id');
-
-    // check if this song can appear in the current search
-    if (searchTerm && searchRegex.test(songTitle)) {
-        // check if it *does* appear in the current search
-        const isInSearchResults = !!document.querySelector(`#song-search-results [data-id="${songId}"]`);
-
-        // this song is in the search results (already in the dom), so we can just delete it
-        if (isInSearchResults) {
-            listItemEl.remove();
-        } else {
-            // move this song to the search results container
-            searchResultsContainerEl.appendChild(listItemEl);
-        }
-    } else {
-        // song cannot appear in current search, so we delete it
-        listItemEl.remove();
-    }
-
-    // remove from selectedSongsForSearch
-    const indexOfRemoved = selectedSongIds.indexOf(songId);
-    selectedSongIds.splice(indexOfRemoved, 1);
 };
 
 // lets the user make searches
 songSearchInputEl.addEventListener('keyup', songSearchInputHandler);
 
 // double-clicking a song will add it to the selection list
-searchResultsContainerEl.addEventListener('dblclick', songSelectHandler);
+searchResultsContainerEl.addEventListener('dblclick', function(event) {
+    songSelectHandler(event, selectedSongIds, selectedContainerEl);
+});
 
 // double-clicking a selected song will remove it from that list
-selectedContainerEl.addEventListener('dblclick', songDeselectHandler);
+selectedContainerEl.addEventListener('dblclick', function(event) {
+    songDeselectHandler(event, songSearchInputEl.value, selectedSongIds, searchResultsContainerEl);
+});
 // END SONG SEARCH CODE
 
 // MODAL CODE
@@ -218,4 +116,8 @@ function displayModal(message) {
     modalText.textContent = message;
     playlistModal.showModal();
 };
+
+playlistModalCloseBtn.addEventListener('click', () => {
+    playlistModal.close();
+});
 // END MODAL CODE

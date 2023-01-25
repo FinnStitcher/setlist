@@ -1,3 +1,5 @@
+import {printSong} from './client-utils.js';
+
 // variables
 const formEl = document.getElementById('song-form');
 const suggestionContainerEl = document.getElementById('suggested-songs');
@@ -71,26 +73,9 @@ async function songSuggestHandler(event) {
         // this isn't a search, it's suggestions
 
         if (songs[0]) {
-            songs.forEach(element => printSong(element));
+            songs.forEach(element => printSong(element, suggestionContainerEl));
         }
     }
-};
-
-function printSong(element) {
-    const {title, artist, year, album} = element;
-
-    // format artist, year, and album into a string
-    let extraInfoString = artist;
-    year ? extraInfoString += `, ${year}` : null;
-    album ? extraInfoString += `, <i>${album}</i>` : null;
-
-    const listEl = document.createElement('li');
-    listEl.setAttribute('class', 'my-0');
-
-    listEl.innerHTML = `<p class="font-medium">${title}</p>
-    <p class="text-neutral-700 font-normal">${extraInfoString}</p>`;
-
-    suggestionContainerEl.appendChild(listEl);
 };
 
 formEl.addEventListener('keyup', songSuggestHandler);
