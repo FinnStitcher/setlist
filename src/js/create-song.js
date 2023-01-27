@@ -93,5 +93,6 @@ function displayModal(message) {
 
 modalCloseBtn.addEventListener('click', () => {
     modal.close();
+    window.location.assign('/playlists');
 });
 // END MODAL CODE

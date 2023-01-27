@@ -1,7 +1,7 @@
 
 <form id="playlist-form">
     <div>
-        <label for="playlist-name" class="block text-lg mb-0.5">Title</label>
+        <label for="playlist-name" class="block text-lg mb-0.5">Title <span class="required" title="Required">*</span></label>
         <input id="playlist-name" name="playlist-name" class="form-control" value="{{title}}">
         {{!-- value will be filled out if a title property is present --}}
     </div>
@@ -10,6 +10,8 @@
 
     <div>
         <label class="block text-lg mb-0.5">Songs</label>
+
+        <p>Double-click an item to move it.</p>
 
         <ul class="form-song-list" id="selected-songs">
             {{#each songs as |s|}}

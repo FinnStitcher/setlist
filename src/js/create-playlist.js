@@ -41,7 +41,7 @@ async function formSubmitHandler(event) {
         displayModal('Your playlist was successfully created! Redirecting...');
 
         setTimeout(() => {
-            window.location.assign('/playlists')
+            window.location.assign('/playlists');
         }, 2000);
     } else {
         const {message} = await response.json();
@@ -117,5 +117,6 @@ function displayModal(message) {
 
 playlistModalCloseBtn.addEventListener('click', () => {
     playlistModal.close();
+    window.location.assign('/playlists');
 });
 // END MODAL CODE

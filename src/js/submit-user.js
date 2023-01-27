@@ -49,4 +49,5 @@ formEl.addEventListener('submit', signupHandler);
 
 signupModalCloseBtn.addEventListener('click', () => {
     signupModal.close();
+    window.location.assign('/playlists');
 });

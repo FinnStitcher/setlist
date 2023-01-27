@@ -547,6 +547,11 @@ video {
   }
 }
 
+.required {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity));
+}
+
 .nav-link {
   width: 7rem;
   flex: 0 1 auto;

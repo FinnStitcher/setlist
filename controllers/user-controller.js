@@ -44,6 +44,16 @@ const userController = {
         const {username, password} = req.body;
 
         try {
+            // check if a user with this username already exists
+            const userWithThisUsername = await User.findOne({
+                username: username
+            });
+
+            if (userWithThisUsername) {
+                res.status(403).json({message: 'This username is taken.'});
+                return;
+            }
+
             const dbRes = await User.create({
                 username,
                 password

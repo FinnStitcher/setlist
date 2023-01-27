@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer components {
+    .required {
+        @apply text-red-700
+    }
     .nav-link {
         @apply w-28 flex-initial
     }

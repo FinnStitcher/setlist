@@ -59,4 +59,5 @@ playlistContainerEl.addEventListener('click', deleteButtonHandler);
 
 closeDelCompleteBtn.addEventListener('click', () => {
     delCompleteModal.close();
+    window.location.assign('/playlists');
 });
