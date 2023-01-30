@@ -32,6 +32,35 @@ const songController = {
         }
     },
 
+    async getSongsByUser(req, res) {
+        // making this route accept an id in the body for dev purposes
+        const {user_id} = req.session || req.body;
+
+        if (!user_id) {
+            res.status(400).json({
+                message: 'Missing an ID to search with.'
+            });
+            return;
+        }
+
+        try {
+            const songDbRes = await Song.find({
+                uploadedBy: user_id
+            });
+
+            if (!songDbRes) {
+                // a search turning up nothing is an acceptable result
+                res.status(200).json({message: 'No results.'});
+                return;
+            };
+
+            res.status(200).json(songDbRes);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json(err);
+        }
+    },
+
     async searchSongs(req, res) {
         // used on create-playlist and edit-playlist pages
 
@@ -90,13 +119,23 @@ const songController = {
 
     async postSong(req, res) {
         const {title, artist, album, year} = req.body;
+        const {user_id} = req.session;
+
+		// confirm user is logged in
+        if (!user_id) {
+            res.status(401).json({
+                message: 'You need to be logged in to do that.'
+            });
+            return;
+        }
 
         try {
             const songDbRes = await Song.create({
                 title,
                 artist,
                 album,
-                year
+                year,
+                uploadedBy: user_id
             });
 
             res.status(200).json(songDbRes);

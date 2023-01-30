@@ -9,6 +9,7 @@ const SongSchema = new Schema(
         },
         artist: {
             type: String,
+            required: true,
             trim: true,
             default: 'Unknwon Artist'
         },
@@ -19,6 +20,11 @@ const SongSchema = new Schema(
         year: {
             type: Number,
             trim: true
+        },
+        uploadedBy: {
+            type: Schema.Types.ObjectId,
+            required: true,
+            ref: 'User'
         }
     }
 );

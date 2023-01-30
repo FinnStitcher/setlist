@@ -5,6 +5,7 @@ const router = require('express').Router();
 const {
     getAllSongs,
     getOneSong,
+    getSongsByUser,
     searchSongs,
     matchSongs,
     postSong
@@ -12,6 +13,7 @@ const {
 
 router.route('/').get(getAllSongs).post(postSong);
 router.route('/match').get(matchSongs);
+router.route('/search/user').get(getSongsByUser);
 router.route('/search/:search').get(searchSongs);
 router.route('/:id').get(getOneSong);
 

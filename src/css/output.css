@@ -547,13 +547,18 @@ video {
   }
 }
 
+body {
+  --tw-bg-opacity: 1;
+  background-color: rgb(245 245 244 / var(--tw-bg-opacity));
+}
+
 .required {
   --tw-text-opacity: 1;
   color: rgb(185 28 28 / var(--tw-text-opacity));
 }
 
 .nav-link {
-  width: 7rem;
+  margin-right: 1.25rem;
   flex: 0 1 auto;
 }
 

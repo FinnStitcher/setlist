@@ -41,10 +41,10 @@ const playlistController = {
 		const { title, dateCreated, dateLastModified, songs } = req.body;
 		const { user_id, username } = req.session;
 
-		// confirm user is logged-in
+		// confirm user is logged in
 		if (!user_id) {
 			res.status(401).json({
-				message: 'You need to be logged in to do this.'
+				message: 'You need to be logged in to do that.'
 			});
 			return;
 		}

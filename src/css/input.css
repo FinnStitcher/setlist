@@ -3,11 +3,16 @@
 @tailwind utilities;
 
 @layer components {
+    body {
+        @apply bg-stone-100
+    }
+    
     .required {
         @apply text-red-700
     }
+
     .nav-link {
-        @apply w-28 flex-initial
+        @apply mr-5 flex-initial
     }
 
     .modal {
