@@ -918,6 +918,10 @@ hr {
   font-weight: 400;
 }
 
+.italic {
+  font-style: italic;
+}
+
 .text-stone-800 {
   --tw-text-opacity: 1;
   color: rgb(41 37 36 / var(--tw-text-opacity));

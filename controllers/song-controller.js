@@ -35,6 +35,7 @@ const songController = {
     async getSongsByUser(req, res) {
         // making this route accept an id in the body for dev purposes
         const {user_id} = req.session || req.body;
+        const {search} = req.query;
 
         if (!user_id) {
             res.status(400).json({
@@ -43,9 +44,16 @@ const songController = {
             return;
         }
 
+        // convert search into regex
+        const searchRegex = search ? new RegExp('\\b' + search, 'i') : new RegExp('.');
+
         try {
             const songDbRes = await Song.find({
-                uploadedBy: user_id
+                uploadedBy: user_id,
+                $or: [
+                    {title: searchRegex},
+                    {artist: searchRegex}
+                ]
             });
 
             if (!songDbRes) {
@@ -75,9 +83,9 @@ const songController = {
             });
 
             if (!songDbRes) {
-                // status 204 because the search turning up nothing is an expected and acceptable result
+                // status 200 because the search turning up nothing is an expected and acceptable result
                 // frontend will tell the user there was nothing
-                res.status(204);
+                res.status(200);
                 return;
             }
 

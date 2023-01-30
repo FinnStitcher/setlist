@@ -20,6 +20,7 @@ export function printNoResultsMessage(placeToAppend) {
     const messageEl = document.createElement('p');
     messageEl.textContent = 'No songs matching your search were found.';
 
+    placeToAppend.innerHTML = '';
     placeToAppend.appendChild(messageEl);
 };
 
