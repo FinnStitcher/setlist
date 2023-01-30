@@ -1,0 +1,55 @@
+<div class="mb-4">
+    <h2 class="page-title">Edit a Song</h2>
+    <p>Note that you can only edit songs you yourself submitted.</p>
+</div>
+
+<div>
+    <h3 class="text-lg">
+        <label for="search-input">Search for a song to edit...</label>
+    </h3>
+
+    <input type="search" id="search-input" name="search-input" class="form-control" />
+
+    <ul class="form-song-list" id="suggested-songs">
+        {{!-- songs will print out here --}}
+    </ul>
+
+    <p>Double-click a song to copy its information into the form below.</p>
+</div>
+
+<hr>
+
+<form id="song-form">
+    <label for="song-title" class="block text-lg mb-0.5">
+        Title
+        <span class="required" title="Required">*</span>
+    </label>
+    <input id="song-title" name="song-title" class="form-control">
+
+    <label for="song-artist" class="block text-lg mb-0.5">
+        Artist
+        <span class="required" title="Required">*</span>
+    </label>
+    <input id="song-artist" name="song-artist" class="form-control">
+
+    <label for="song-album" class="block text-lg mb-0.5">
+        Album
+    </label>
+    <input id="song-album" name="song-album" class="form-control">
+
+    <label for="song-year" class="block text-lg mb-0.5">
+        Year
+    </label>
+    <input id="song-year" name="song-year" type="number" class="form-control">
+
+    <hr class="border-stone-400/50">
+
+    <button type="submit" class="rectangle-btn">Submit</button>
+</form>
+
+{{#> modal modalId="modal" closeBtnId="modal-close-btn"}}
+    <p></p>
+{{/modal}}
+
+<script type="module" src="/js/edit-song.js"></script>
+<script type="module" src="/js/client-utils.js"></script>
