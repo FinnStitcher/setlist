@@ -87,6 +87,9 @@ function songCopyToFormHandler(event) {
         artistInputEl.value = artist;
         albumInputEl.value = album.replace('<i>', '').replace('</i>', '');
         yearInputEl.value = year;
+
+        // unhide form
+        formEl.className = "";
     }
 };
 
