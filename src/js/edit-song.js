@@ -50,12 +50,14 @@ function songCopyToFormHandler(event) {
     const isLi = target.matches('li') || target.matches('li p') || target.matches('li p i');
 
     if (isLi) {
-        // get data from list item
         // streamlines the code if i don't have to account for multiple possible targets
         const listEl = target.closest('li');
 
+        // get data from list item
+
+        selectedSongId = listEl.getAttribute('data-id');
         const title = listEl.children[0].textContent;
-        
+
         // innerHTML instead of textContent so we can tell if there's an album or not
         const extraInfoArr = listEl.children[1].innerHTML.split(', ');
 
@@ -79,12 +81,11 @@ function songCopyToFormHandler(event) {
             }
         }
         // if length === 1, there was only one item in the array, the artist, which has already been saved to a variable
-        album.replace('<i>', '').replace('</i>', '');
 
         // put the collected data into the form
         titleInputEl.value = title;
         artistInputEl.value = artist;
-        albumInputEl.value = album;
+        albumInputEl.value = album.replace('<i>', '').replace('</i>', '');
         yearInputEl.value = year;
     }
 };
@@ -94,6 +95,45 @@ searchResultsCtnrEl.addEventListener('dblclick', songCopyToFormHandler);
 // END SONG SEARCH CODE
 
 // SONG FORM CODE
+async function songSubmitHandler(event) {
+    event.preventDefault();
+
+    // check that required values are present
+    if (!titleInputEl.value || !artistInputEl.value) {
+        displayModal('You need to include a title and artist, at minumum.');
+        return;
+    }
+
+    const songObj = {
+        title: titleInputEl.value,
+        artist: artistInputEl.value,
+        album: albumInputEl.value,
+        year: yearInputEl.value
+    };
+
+    const response = await fetch('/api/songs/' + selectedSongId, {
+        method: 'PUT',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(songObj)
+    });
+
+    if (response.ok) {
+        displayModal('This song was updated successfully. Refreshing the page...');
+
+        setTimeout(() => {
+            window.location.assign('/edit-song')
+        }, 2000);
+    } else {
+        const {message} = await response.json();
+
+        displayModal(message);
+    }
+};
+
+formEl.addEventListener('submit', songSubmitHandler);
 // END SONG FORM CODE
 
 // MODAL CODE
@@ -108,6 +148,6 @@ function displayModal(message) {
 
 modalCloseBtn.addEventListener('click', () => {
     modal.close();
-    window.location.assign('/playlists');
+    window.location.assign('/edit-song');
 });
 // END MODAL CODE
