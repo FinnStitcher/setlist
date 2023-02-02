@@ -668,6 +668,10 @@ hr {
   border-color: rgb(168 162 158 / var(--tw-border-opacity));
 }
 
+.visible {
+  visibility: visible;
+}
+
 .m-auto {
   margin: auto;
 }

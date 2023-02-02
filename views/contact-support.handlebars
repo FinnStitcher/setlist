@@ -9,11 +9,17 @@
             Contact Me
         </h3>
 
-        <p>Did you find a bug? Do you have a great idea for the future of the website? Is there a quirk of the UI that's making it hard to use? You can reach out to me at <a class="text-amber-700 underline" href="mailto:foundfootage@protonmail.com">foundfootage@protonmail.com</a>. Alternatively, you can fill out the form below, and it'll get to me.</p>
+        <p>Did you find a bug? Do you have a great idea for the future of the website? Is there a quirk of the UI that's making it hard to use? You can reach out to me at <a class="text-amber-700 underline" href="mailto:setlistdev@yahoo.com">setlistdev@yahoo.com</a>. Alternatively, you can fill out the form below, and it'll get to me.</p>
 
         <p>If you have a bug report, please give a <em>detailed description</em> of the issue and when it happened, so it's easy for me to diagnose!</p>
         
         <form id="email-form" class="w-fit p-1.5 border-2 border-stone-300 rounded">
+            <label for="email-name" class="block mb-0.5">
+                Your name
+                <span class="required" title="Required">*</span>
+            </label>
+            <input id="email-name" name="email-name" class="form-control" />
+
             <label for="email-address" class="block mb-0.5">
                 Your email address
                 <span class="required" title="Required">*</span>
@@ -56,3 +62,5 @@
         </section>
     </div>
 </div>
+
+<script type="module" src="/js/send-email.js"></script>
