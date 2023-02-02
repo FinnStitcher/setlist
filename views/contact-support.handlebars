@@ -2,8 +2,8 @@
     <h2 class="page-title">Contact and Support</h2>
 </div>
 
-<div class="flex flex-row flex-wrap gap-2">
-    <section class="flex-auto basis-96">
+<div class="flex flex-row flex-wrap">
+    <section class="flex-auto basis-64 mr-2.5">
         <h3 class="text-xl border-l-4 border-stone-400 mb-2.5 pl-4">
             <i class="fa-solid fa-record-vinyl mr-1.5"></i>
             Contact Me
@@ -11,31 +11,48 @@
 
         <p>Did you find a bug? Do you have a great idea for the future of the website? Is there a quirk of the UI that's making it hard to use? You can reach out to me at <a class="text-amber-700 underline" href="mailto:foundfootage@protonmail.com">foundfootage@protonmail.com</a>. Alternatively, you can fill out the form below, and it'll get to me.</p>
 
-        <p>If you have a bug report, please give a <em>detailed description</em> of where and when it happened, so it's easy for me to diagnose!</p>
+        <p>If you have a bug report, please give a <em>detailed description</em> of the issue and when it happened, so it's easy for me to diagnose!</p>
         
-        <form>
-            <p>your email</p>
-            <p>your name</p>
-            <p>subject</p>
-            <p>message</p>
+        <form id="email-form" class="w-fit p-1.5 border-2 border-stone-300 rounded">
+            <label for="email-address" class="block mb-0.5">
+                Your email address
+                <span class="required" title="Required">*</span>
+            </label>
+            <input id="email-address" name="email-address" type="email" class="form-control" />
+
+            <label for="email-subject" class="block mb-0.5">
+                Subject
+                <span class="required" title="Required">*</span>
+            </label>
+            <input id="email-subject" name="email-subject" class="form-control" />
+
+            <label for="email-message" class="block mb-0.5">
+                Body
+                <span class="required" title="Required">*</span>
+            </label>
+            <textarea id="email-message" name="email-message" class="form-control" rows="4"></textarea>
+
+            <button type="submit" class="rectangle-btn mt-2">Submit</button>
         </form>
     </section>
 
-    <section class="flex-auto basis-96">
-        <h3 class="text-xl border-l-4 border-stone-400 mb-2.5 pl-4">
-            <i class="fa-solid fa-record-vinyl mr-1.5"></i>
-            Find Us on Github
-        </h3>
-        
-        <p>You can also file bug reports on Setlist's <a class="text-amber-700 underline" href="https://github.com/FinnStitcher/setlist/issues">Github Issues</a> page. This is also where to go if you want to see a little bit of what's planned for the future.</p>
-    </section>
+    <div class="flex-auto basis-64">
+        <section class="mb-2.5">
+            <h3 class="text-xl border-l-4 border-stone-400 mb-2.5 pl-4">
+                <i class="fa-solid fa-record-vinyl mr-1.5"></i>
+                Find Us on Github
+            </h3>
+            
+            <p>You can also file bug reports on Setlist's <a class="text-amber-700 underline" href="https://github.com/FinnStitcher/setlist/issues">Github Issues</a> page. This is also where to go if you want to see a little bit of what's planned for the future.</p>
+        </section>
 
-    <section class="flex-auto basis-96">
-        <h3 class="text-xl border-l-4 border-stone-400 mb-2.5 pl-4">
-            <i class="fa-solid fa-record-vinyl mr-1.5"></i>
-            Donate
-        </h3>
+        <section>
+            <h3 class="text-xl border-l-4 border-stone-400 mb-2.5 pl-4">
+                <i class="fa-solid fa-record-vinyl mr-1.5"></i>
+                Donate
+            </h3>
 
-        <p>Setlist is run by a single developer. If you like what I do here, consider <a class="text-amber-700 underline" href="https://ko-fi.com/finnphillips">tipping me on Ko-Fi</a> to pay for distribution.</p>
-    </section>
+            <p>Setlist is run by a single developer. If you like what I do here, consider <a class="text-amber-700 underline" href="https://ko-fi.com/finnphillips">tipping me on Ko-Fi</a> to pay for the cost of hosting.</p>
+        </section>
+    </div>
 </div>

@@ -620,6 +620,7 @@ p {
 }
 
 .form-control {
+  margin-bottom: 0.125rem;
   display: block;
   width: 100%;
   border-width: 1px;
@@ -690,6 +691,14 @@ hr {
   margin-bottom: 1rem;
 }
 
+.mr-2\.5 {
+  margin-right: 0.625rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
 .mb-2\.5 {
   margin-bottom: 0.625rem;
 }
@@ -712,6 +721,10 @@ hr {
 
 .mb-0 {
   margin-bottom: 0px;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
 }
 
 .mb-3 {
@@ -750,6 +763,11 @@ hr {
   display: none;
 }
 
+.w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
 .w-3\/4 {
   width: 75%;
 }
@@ -770,8 +788,8 @@ hr {
   flex: 1 1 auto;
 }
 
-.basis-96 {
-  flex-basis: 24rem;
+.basis-64 {
+  flex-basis: 16rem;
 }
 
 .flex-row {
@@ -790,10 +808,6 @@ hr {
   justify-content: space-between;
 }
 
-.gap-2 {
-  gap: 0.5rem;
-}
-
 .space-y-1\.5 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(0.375rem * calc(1 - var(--tw-space-y-reverse)));
@@ -810,6 +824,10 @@ hr {
   --tw-divide-y-reverse: 0;
   border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
   border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
+}
+
+.rounded {
+  border-radius: 0.25rem;
 }
 
 .rounded-md {
@@ -841,13 +859,13 @@ hr {
   border-color: rgb(168 162 158 / var(--tw-border-opacity));
 }
 
-.border-stone-400\/50 {
-  border-color: rgb(168 162 158 / 0.5);
-}
-
 .border-stone-300 {
   --tw-border-opacity: 1;
   border-color: rgb(214 211 209 / var(--tw-border-opacity));
+}
+
+.border-stone-400\/50 {
+  border-color: rgb(168 162 158 / 0.5);
 }
 
 .bg-stone-300 {
@@ -860,12 +878,12 @@ hr {
   background-color: rgb(168 162 158 / var(--tw-bg-opacity));
 }
 
-.p-1 {
-  padding: 0.25rem;
-}
-
 .p-1\.5 {
   padding: 0.375rem;
+}
+
+.p-1 {
+  padding: 0.25rem;
 }
 
 .py-2\.5 {

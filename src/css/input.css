@@ -36,7 +36,7 @@
     }
 
     .form-control {
-        @apply block w-full md:w-96 border border-amber-600/50
+        @apply block w-full md:w-96 border border-amber-600/50 mb-0.5
     }
 
     .form-song-list {
