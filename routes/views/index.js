@@ -23,4 +23,10 @@ router.get('/', (req, res) => {
     }
 });
 
+router.get('/contact-and-support', (req, res) => {
+    const {loggedIn} = req.session;
+
+    res.render('contact-support', {loggedIn});
+});
+
 module.exports = router;
