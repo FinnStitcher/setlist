@@ -7,7 +7,7 @@ export function printSong(element, placeToAppend) {
     album ? extraInfoString += `, <i>${album}</i>` : null;
 
     const listEl = document.createElement('li');
-    listEl.setAttribute('class', 'my-0');
+    listEl.setAttribute('class', 'my-0 hover:bg-stone-300 cursor-grab');
     listEl.setAttribute('data-id', _id);
 
     listEl.innerHTML = `<p class="font-medium">${title}</p>

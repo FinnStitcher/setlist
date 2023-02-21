@@ -633,6 +633,10 @@ p {
   }
 }
 
+.form-control {
+  padding: 0 3px;
+}
+
 .form-song-list {
   margin-bottom: 0.5rem;
   min-height: 3rem;
@@ -650,9 +654,10 @@ p {
 .form-song-list {
   --tw-bg-opacity: 1;
   background-color: rgb(231 229 228 / var(--tw-bg-opacity));
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
   padding-top: 0.625rem;
   padding-bottom: 0.625rem;
-  padding-left: 0.75rem;
 }
 
 @media (min-width: 1024px) {
@@ -790,6 +795,10 @@ hr {
 
 .basis-64 {
   flex-basis: 16rem;
+}
+
+.cursor-grab {
+  cursor: grab;
 }
 
 .flex-row {
@@ -976,6 +985,15 @@ hr {
 
 .underline {
   text-decoration-line: underline;
+}
+
+.cursor-grab:hover {
+  cursor: grab;
+}
+
+.hover\:bg-stone-300:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(214 211 209 / var(--tw-bg-opacity));
 }
 
 @media (min-width: 640px) {

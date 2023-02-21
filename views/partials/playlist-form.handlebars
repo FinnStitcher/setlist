@@ -11,17 +11,17 @@
     <div>
         <label class="form-label">Songs</label>
 
-        <p>Double-click an item to move it.</p>
+        <p>Click and drag or double-click to move songs in and out of your playlist.</p>
 
         <ul class="form-song-list" id="selected-songs">
             {{#each songs as |s|}}
-                {{> song s}}
+                {{> song-can-drag s}}
             {{/each}}
             {{!-- selected songs will be printed here --}}
         </ul>
 
         <label for="song-search" class="block mb-0.5">Search:</label>
-        <input id="song-search" name="song-search" class="form-control">
+        <input id="song-search" name="song-search" class="form-control" autocomplete="off">
 
         <ul class="form-song-list" id="song-search-results">
             {{!-- songs will print out in here --}}

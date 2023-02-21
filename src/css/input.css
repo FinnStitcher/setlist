@@ -36,14 +36,19 @@
     }
 
     .form-control {
-        @apply block w-full md:w-96 border border-amber-600/50 mb-0.5
+        @apply block w-full md:w-96 border border-amber-600/50 mb-0.5;
+        padding: 0 3px;
     }
 
     .form-song-list {
-        @apply bg-stone-200 pl-3 py-2.5 divide-y space-y-1.5 min-h-12 mb-2 lg:w-3/5
+        @apply bg-stone-200 px-3 py-2.5 divide-y space-y-1.5 min-h-12 mb-2 lg:w-3/5
     }
 
     hr {
         @apply my-4 border-stone-400
     }
+}
+
+.cursor-grab:hover {
+    cursor: grab;
 }

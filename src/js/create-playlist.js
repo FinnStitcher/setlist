@@ -104,7 +104,7 @@ songSearchInputEl.addEventListener('keyup', songSearchInputHandler);
 // make both lists sortable and connected
 $('#selected-songs, #song-search-results').sortable({
     connectWith: ".form-song-list",
-    cursor: "grab"
+    cursor: "grabbing"
 });
 // ideally we wouldn't be able to shuffle search results around
 // unsure how to do this

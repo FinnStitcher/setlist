@@ -1,0 +1,6 @@
+<li class="my-0 hover:bg-stone-300 cursor-grab" data-id="{{this._id}}">
+    <p class="font-medium">{{this.title}}</p>
+    <p class="text-neutral-700 font-normal">
+        {{this.artist}}{{#if this.year}}, {{this.year}}{{/if}}{{#if this.album}}, <i>{{this.album}}</i>{{/if}}
+    </p>
+</li>
