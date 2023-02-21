@@ -100,15 +100,28 @@ async function songSearchInputHandler() {
 songSearchInputEl.addEventListener('keyup', songSearchInputHandler);
 // END SONG SEARCH CODE
 
-// JQUERY CODE
-// make both lists sortable and connected
-$('#selected-songs, #song-search-results').sortable({
-    connectWith: ".form-song-list",
-    cursor: "grabbing"
+// SORTABLE CODE
+// make songs sortable
+Sortable.create(selectedContainerEl, {
+    group: {
+        name: 'songs'
+    },
+    animation: 150,
+    ghostClass: 'opacity-0',
+    dragClass: 'bg-stone-300'
 });
-// ideally we wouldn't be able to shuffle search results around
-// unsure how to do this
-// END JQUERY CODE
+
+// make search results sortable
+Sortable.create(searchResultsContainerEl, {
+    group: {
+        name: 'songs'
+    },
+    sort: false,
+    animation: 150,
+    ghostClass: 'opacity-0',
+    dragClass: 'bg-stone-300'
+});
+// END SORTABLE CODE
 
 // MODAL CODE
 const playlistModal = document.getElementById('pl-modal');
