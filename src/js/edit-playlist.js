@@ -110,20 +110,6 @@ $('#selected-songs, #song-search-results').sortable({
 });
 // ideally we wouldn't be able to shuffle search results around
 // unsure how to do this
-
-// update selectedSongIds when an item is dragged into #selected-songs
-// $('#selected-songs').on('sortstop', function(event, ui) {
-//     // get child elements
-//     const childEls = $('#selected-songs').children();
-//     const newSongIds = [];
-
-//     // extract ids of songs
-//     childEls.each(function() {
-//         console.log($(this).data());
-//         //newSongIds.push($(this).attr('data-id'));
-//     });
-//     //console.log(newSongIds);
-// });
 // END JQUERY CODE
 
 // MODAL CODE

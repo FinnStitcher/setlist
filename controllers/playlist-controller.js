@@ -128,7 +128,6 @@ const playlistController = {
 				return;
 			}
 
-            console.log(playlistDbRes);
 			res.status(200).json(playlistDbRes);
 		} catch (err) {
 			console.log(err);

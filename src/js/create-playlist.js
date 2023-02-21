@@ -1,7 +1,4 @@
-import {printSong, printNoResultsMessage, songSelectHandler, songDeselectHandler} from './client-utils.js';
-
-// array for the ids of songs that will be added to the playlist
-const selectedSongIds = [];
+import {printSong, printNoResultsMessage} from './client-utils.js';
 
 // PLAYLIST FORM CODE
 const formEl = document.getElementById('playlist-form');
@@ -11,6 +8,14 @@ async function formSubmitHandler(event) {
 	event.preventDefault();
 
     const title = titleInputEl.value;
+
+    // extract song ids
+    const selectedSongs = $('#selected-songs').children();
+    const selectedSongIds = [];
+
+    selectedSongs.each(function (i, el) {
+        selectedSongIds.push($(el).attr('data-id'));
+    });
 
     // check that title is present
     if (!title) {
@@ -93,17 +98,17 @@ async function songSearchInputHandler() {
 
 // lets the user make searches
 songSearchInputEl.addEventListener('keyup', songSearchInputHandler);
-
-// double-clicking a song will add it to the selection list
-searchResultsContainerEl.addEventListener('dblclick', function(event) {
-    songSelectHandler(event, selectedSongIds, selectedContainerEl);
-});
-
-// double-clicking a selected song will remove it from that list
-selectedContainerEl.addEventListener('dblclick', function(event) {
-    songDeselectHandler(event, songSearchInputEl.value, selectedSongIds, searchResultsContainerEl);
-});
 // END SONG SEARCH CODE
+
+// JQUERY CODE
+// make both lists sortable and connected
+$('#selected-songs, #song-search-results').sortable({
+    connectWith: ".form-song-list",
+    cursor: "grab"
+});
+// ideally we wouldn't be able to shuffle search results around
+// unsure how to do this
+// END JQUERY CODE
 
 // MODAL CODE
 const playlistModal = document.getElementById('pl-modal');
