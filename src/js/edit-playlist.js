@@ -107,6 +107,16 @@ selectedContainerEl.addEventListener('dblclick', function(event) {
 });
 // END SONG SEARCH CODE
 
+// INTERACTIVITY CODE
+// make both lists sortable and connected
+$('#selected-songs, #song-search-results').sortable({
+    connectWith: ".form-song-list",
+    cursor: "grab" // want the pointing hand
+});
+// ideally we wouldn't be able to shuffle search results around
+// unsure how to do this
+// END INTERACTIVITY CODE
+
 // MODAL CODE
 const playlistModal = document.getElementById('pl-modal');
 const playlistModalCloseBtn = document.getElementById('pl-modal-close-btn');
