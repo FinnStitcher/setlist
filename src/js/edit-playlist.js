@@ -1,7 +1,4 @@
-import {printSong, printNoResultsMessage, songSelectHandler, songDeselectHandler} from './client-utils.js';
-
-// array for the ids of songs in the playlist
-const selectedSongIds = [];
+import {printSong, printNoResultsMessage} from './client-utils.js';
 
 // PLAYLIST FORM CODE
 const formEl = document.getElementById('playlist-form');
@@ -11,6 +8,14 @@ async function formSubmitHandler(event) {
 	event.preventDefault();
 
     const title = titleInputEl.value;
+
+    // extract song ids
+    const selectedSongs = $('#selected-songs').children();
+    const selectedSongIds = [];
+
+    selectedSongs.each(function (i, el) {
+        selectedSongIds.push($(el).attr('data-id'));
+    });
 
     // check that title is present
     if (!title) {
@@ -95,27 +100,31 @@ async function songSearchInputHandler() {
 
 // lets the user make searches
 songSearchInputEl.addEventListener('keyup', songSearchInputHandler);
-
-// double-clicking a song will add it to the selection list
-searchResultsContainerEl.addEventListener('dblclick', function(event) {
-    songSelectHandler(event, selectedSongIds, selectedContainerEl);
-});
-
-// double-clicking a selected song will remove it from that list
-selectedContainerEl.addEventListener('dblclick', function(event) {
-    songDeselectHandler(event, songSearchInputEl.value, selectedSongIds, searchResultsContainerEl);
-});
 // END SONG SEARCH CODE
 
-// INTERACTIVITY CODE
+// JQUERY CODE
 // make both lists sortable and connected
 $('#selected-songs, #song-search-results').sortable({
     connectWith: ".form-song-list",
-    cursor: "grab" // want the pointing hand
+    cursor: "grab"
 });
 // ideally we wouldn't be able to shuffle search results around
 // unsure how to do this
-// END INTERACTIVITY CODE
+
+// update selectedSongIds when an item is dragged into #selected-songs
+// $('#selected-songs').on('sortstop', function(event, ui) {
+//     // get child elements
+//     const childEls = $('#selected-songs').children();
+//     const newSongIds = [];
+
+//     // extract ids of songs
+//     childEls.each(function() {
+//         console.log($(this).data());
+//         //newSongIds.push($(this).attr('data-id'));
+//     });
+//     //console.log(newSongIds);
+// });
+// END JQUERY CODE
 
 // MODAL CODE
 const playlistModal = document.getElementById('pl-modal');
