@@ -16,6 +16,10 @@ const UserSchema = new Schema(
         playlists: [{
             type: Schema.Types.ObjectId,
             ref: 'Playlist'
+        }],
+        folders: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Folder'
         }]
     }
 );
