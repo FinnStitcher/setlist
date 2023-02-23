@@ -16,11 +16,17 @@ router.get('/playlists', async (req, res) => {
         _id: user_id
     })
     .lean()
-    .select('-password -__v')
+    .select('-password -playlists -__v')
     .populate({
-        path: 'playlists',
+        path: 'folders',
         select: '-__v -username',
-        populate: {path: 'songs'}
+        populate: {
+            path: 'playlists',
+            select: '-__v -username',
+            populate: {
+                path: 'songs'
+            }
+        }
     })
     .then(dbRes => dbRes)
     .catch(err => err);

@@ -6,11 +6,9 @@
 </div>
 
 <div id="playlist-container">
-    {{#each userData.playlists as |pl|}}
-        {{#> collapsing-box title=pl.title belongsToThisUser=../belongsToThisUser}}
-            {{> playlist pl=pl}}
-        {{/collapsing-box}}
-    {{/each}}
+    {{#each userData.folders as |fl|}}
+        {{> folder fl=fl belongsToThisUser=true}}
+    {{/each}}    
 </div>
 
 {{#> modal modalId="link-modal" closeBtnId="link-modal-close-btn"}}

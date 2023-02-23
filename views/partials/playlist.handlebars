@@ -1,6 +1,6 @@
-{{!-- <section class="border-2 border-stone-300 mb-3">
+<section class="border-2 border-stone-300">
     <div class="bg-stone-300 p-1.5 flex justify-between sm:justify-start pl-title">
-        <h3>{{pl.title}}</h3>
+        <h4>{{pl.title}}</h4>
         <p class="ml-2 md:ml-4">▼</p>
     </div>
     
@@ -11,19 +11,18 @@
 
             <button type="button" data-id="{{pl._id}}" data-modal-btn="open-modal" data-btn-type="del-btn" class="rectangle-btn w-36 text-left">Delete</button>
         </div>
-        {{/if}} --}}
-
+        {{/if}}
+        
         <div class="pl-3 py-2.5">
-        <ul class="divide-y space-y-1.5">
-            {{#each pl.songs as |song|}}
-                {{> song song}}
-            {{/each}}
-        </ul>
+            <ul class="divide-y space-y-1.5">
+                {{#each pl.songs as |song|}}
+                    {{> song song}}
+                {{/each}}
+            </ul>
 
-        <hr>
+            <hr>
 
-        <p class="-mt-2"><a href="/playlists/{{pl._id}}">Link to this playlist.</a></p>
-
+            <p class="-mt-2"><a href="/playlists/{{pl._id}}">Link to this playlist.</a></p>
         </div>
-    {{!-- </div>
-</section> --}}
+    </div>
+</section>
