@@ -6,7 +6,9 @@
 
 <div id="playlist-container">
     {{#each userData.playlists as |pl|}}
-        {{> playlist pl=pl belongsToThisUser=../belongsToThisUser}}
+        {{#> collapsing-box title=pl.title belongsToThisUser=../belongsToThisUser}}
+            {{> playlist pl=pl}}
+        {{/collapsing-box}}
     {{/each}}
 </div>
 

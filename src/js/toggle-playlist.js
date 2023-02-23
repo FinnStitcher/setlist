@@ -14,11 +14,11 @@ function togglePlaylistHandler(e) {
         
         if (playlistBody.matches('.hidden')) {
             playlistBody.className = 'block';
-            arrow.textContent = '▲';
+            //arrow.textContent = '▲';
         } else if (playlistBody.matches('.block')) {
             playlistBody.className = 'hidden';
         
-            arrow.textContent = '▲';
+            //arrow.textContent = '▲';
         }
     }
 };
