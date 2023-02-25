@@ -6,10 +6,12 @@ require('dotenv').config();
 const userViews = require('./user-views');
 const playlistViews = require('./playlist-views');
 const songViews = require('./song-views');
+const folderViews = require('./folder-views');
 
 router.use('/', userViews);
 router.use('/', playlistViews);
 router.use('/', songViews);
+router.use('/', folderViews);
 
 router.get('/', (req, res) => {
     const {loggedIn} = req.session;

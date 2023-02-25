@@ -1,0 +1,29 @@
+<section class="border-2 border-stone-300 mb-3">
+    <div class="border-b-2 border-stone-300 bg-stone-200  px-2 py-2 flex justify-between sm:justify-start fl-title">
+        <h3>{{fl.name}}</h3>
+
+        <a
+            role="button"
+            href="/edit-folder/{{fl._id}}"
+            class="ml-2 md:ml-8 inline-block"
+        >Edit</a>
+
+        <button
+            type="button"
+            data-id="{{fl._id}}"
+            data-btn-type="del-fl-btn"
+            class="ml-2 md:ml-4 inline-block"
+        >Delete</button>
+    </div>
+
+    <div class="pl-3 py-2.5 space-y-3">
+        <ul class="divide-y space-y-1.5">
+            {{#each fl.playlists as |pl|}}
+                <li class="my-0">
+                    <p class="font-medium">{{pl.title}}</p>
+                    <p class="text-neutral-700 font-normal">{{pl.songs.length}} tracks</p>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</section>

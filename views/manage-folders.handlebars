@@ -1,0 +1,11 @@
+<div class="mb-4">
+    <h2 class="page-title">Your Folders</h2>
+
+    <a role="button" href="/add-folder" class="rectangle-btn">Create New +</a>
+
+    <a role="button" href="/playlists" class="rectangle-btn">Manage Playlists</a>
+</div>
+
+{{#each userData.folders as |fl|}}
+    {{> folder-no-collapse fl=fl}}
+{{/each}}
