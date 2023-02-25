@@ -1,4 +1,4 @@
-const {User} = require('../models');
+const { User, Folder } = require('../models');
 
 require('dotenv').config();
 
@@ -22,8 +22,12 @@ const userController = {
                 _id: searchTerm
             })
             .populate({
-                path: 'playlists',
-                select: '-__v -username'
+                path: 'folders',
+                select: '-__v -username',
+                populate: {
+                    path: 'playlists',
+                    select: '-__v -username'
+                }
             });
 
             // user was not found
@@ -54,19 +58,26 @@ const userController = {
                 return;
             }
 
-            const dbRes = await User.create({
+            // create 'Unsorted' folder for this user
+            const { _id: unsortedFolderId } = await Folder.create({
+                name: 'Unsorted',
+                username
+            });
+
+            const userDbRes = await User.create({
                 username,
-                password
+                password,
+                folders: [unsortedFolderId]
             });
 
             // add user data to session
             req.session.save(() => {
-                req.session.user_id = dbRes._id;
-                req.session.username = dbRes.username;
+                req.session.user_id = userDbRes._id;
+                req.session.username = userDbRes.username;
                 req.session.loggedIn = true;
 
                 res.status(201).json({
-                    user: dbRes,
+                    user: userDbRes,
                     session: req.session,
                     message: 'You\'re logged in.'
                 });

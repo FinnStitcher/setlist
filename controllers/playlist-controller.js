@@ -1,4 +1,4 @@
-const { Playlist, User } = require('../models');
+const { Playlist, User, Folder } = require('../models');
 const { checkUserOwnership } = require('../utils/utils.js');
 
 const playlistController = {
@@ -65,9 +65,25 @@ const playlistController = {
 				{ _id: user_id },
 				{ $push: { playlists: _id } },
 				{ new: true }
-			).populate('playlists');
+			).populate({
+                path: 'playlists',
+                select: 'title'
+            });
 
-			res.status(200).json(userDbRes);
+            // add to relevant user's Unsorted folder
+            const folderDbRes = await Folder.findOneAndUpdate(
+                { _id: userDbRes.folders[0] },
+                { $push: { playlists: _id } },
+                { new: true }
+            ).populate({
+                path: 'playlists',
+                select: 'title'
+            });
+
+			res.status(200).json({
+                user: userDbRes,
+                folder: folderDbRes
+            });
 		} catch (err) {
 			console.log(err);
 

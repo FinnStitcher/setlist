@@ -35,11 +35,6 @@ const PlaylistSchema = new Schema(
     }
 );
 
-// virtual - playlist length
-PlaylistSchema.virtual('playlistLength').get(function() {
-    return this.songs.length;
-});
-
 const Playlist = model('Playlist', PlaylistSchema);
 
 module.exports = Playlist;
