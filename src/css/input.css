@@ -44,6 +44,12 @@
         @apply bg-stone-200 px-3 py-2.5 divide-y space-y-1.5 min-h-12 mb-2 lg:w-3/5
     }
 
+    .form-pl-list {
+        @apply bg-stone-200 px-3 py-2.5 divide-y space-y-1.5 min-h-12 mb-2 lg:w-3/5
+    }
+
+    /* can fix that redundancy another time */
+
     hr {
         @apply my-4 border-stone-400
     }

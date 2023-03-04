@@ -1,0 +1,31 @@
+<form id="fl-form">
+    <div>
+        <label for="fl-name" class="form-label">Name <span class="required" title="Required">*</span></label>
+        <input id="fl-name" name="fl-name" class="form-control" value="{{name}}" />
+    </div>
+
+    <hr />
+
+    <div>
+        <label class="form-label">Playlists</label>
+
+        <p>Click and drag to move playlists in and out of this folder.</p>
+
+        <ul class="form-pl-list" id="selected-pls">
+        </ul>
+
+        {{!-- <label for="pl-search" class="block mb-0.5">Search your playlists:</label>
+        <input id="pl-search" name="pl-search" class="form-control" autocomplete="off" /> --}}
+
+        <ul class="form-pl-list" id="pl-search-results">
+            {{!-- will autofill with this user's playlists --}}
+            {{#each userData.playlists as |pl|}}
+                {{> playlist-can-drag pl}}
+            {{/each}}
+        </ul>
+    </div>
+
+    <hr />
+
+    <button type="submit" class="rectangle-btn">Submit</button>
+</form>
