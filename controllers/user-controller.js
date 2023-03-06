@@ -44,6 +44,45 @@ const userController = {
         }
     },
 
+    async getOneUserPlaylists(req, res) {
+        const searchTerm = req.params.id;
+
+        try {
+            const dbRes = await User.findOne({
+                _id: searchTerm
+            })
+            .select('playlists')
+            .populate({
+                path: 'playlists'
+            });
+
+            // user was not found
+            if (!dbRes) {
+                res.status(404).json({message: 'User not found.'});
+                return;
+            }
+
+            res.status(200).json(dbRes);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json(err);
+        }
+    },
+
+    async getThisUserId(req, res) {
+        // if this function is called by someone not logged in, do nothing
+        // else, there should be a user_id attached to the session
+        // return that user id
+        const {loggedIn} = req.session;
+
+        if (!loggedIn) {
+            res.status(401).json({message: 'No session.'});
+            return;
+        }
+        
+        res.status(200).json(req.session.user_id);
+    },
+
     async postUser(req, res) {
         const {username, password} = req.body;
 
