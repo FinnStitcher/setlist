@@ -7,6 +7,10 @@ const FolderSchema = new Schema(
             required: true,
             trim: true
         },
+        dateCreated: {
+            type: Date,
+            default: Date.now
+        },
         dateLastModified: {
             type: Date,
             default: Date.now

@@ -12,6 +12,61 @@ const thisUserPlaylists = await fetch('/api/users/' + userId + '/playlists').the
 // END MEMO CODE
 
 // SUBMIT CODE
+async function formSubmitHandler(event) {
+    event.preventDefault();
+
+    const name = nameInputEl.value.trim();
+
+    // extract playlist ids
+    const selectedPlaylists = $(selectedContainerEl).children();
+    const selectedPlaylistIds = [];
+
+    selectedPlaylists.each((i, el) => {
+        selectedPlaylistIds.push($(el).attr('data-id'));
+    });
+
+    // check that name is present
+    if (!name) {
+        // TODO: Modal
+        console.log('need name');
+        return;
+    }
+
+    // create folder object
+    const folderObj = {
+        name: name,
+        dateCreated: Date.now(),
+        dateLastModified: Date.now(),
+        playlists: [...selectedPlaylistIds],
+        username: 'Anonymous' // dummy value, will be overwritten on the backend
+    };
+
+    // send req to server
+    const response = await fetch('/api/folders', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(folderObj)
+    });
+
+    if (response.ok) {
+        // TODO: Modal
+        console.log('success');
+
+        setTimeout(() => {
+            window.location.assign('/folders');
+        }, 2000);
+    } else {
+        const {message} = await response.json();
+
+        // TODO: Modal
+        console.log('fail:', message);
+    }
+};
+
+formEl.addEventListener('submit', formSubmitHandler);
 // END SUBMIT CODE
 
 // FILTER CODE
