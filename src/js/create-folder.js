@@ -7,8 +7,8 @@ const searchInputEl = document.querySelector('#pl-search');
 // MEMO CODE
 const userId = await fetch('/api/users/this-user').then(data => data.json());
 
-// get this user's playlists
-const thisUserPlaylists = await fetch('/api/users/' + userId + '/playlists').then(data => data.json()).then(json => json.playlists);
+// get this user's unsorted playlists
+const thisUserUnsorted = await fetch('/api/users/' + userId + '/playlists/unsorted').then(data => data.json()).then(json => json.playlists);
 // END MEMO CODE
 
 // SUBMIT CODE
@@ -50,20 +50,33 @@ async function formSubmitHandler(event) {
         },
         body: JSON.stringify(folderObj)
     });
+    const json = await response.json();
 
-    if (response.ok) {
-        // TODO: Modal
-        console.log('success');
-
-        setTimeout(() => {
-            window.location.assign('/folders');
-        }, 2000);
-    } else {
-        const {message} = await response.json();
+    if (!response.ok) {
+        const {message} = json;
 
         // TODO: Modal
-        console.log('fail:', message);
-    }
+        console.log('failure:', message);
+
+        return;
+    };
+
+    // remove these playlists from all other folders
+    const {_id: newFolderId} = json.folder;
+
+    // if (response.ok) {
+    //     // TODO: Modal
+    //     console.log('success');
+
+    //     setTimeout(() => {
+    //         window.location.assign('/folders');
+    //     }, 2000);
+    // } else {
+    //     const {message} = await response.json();
+
+    //     // TODO: Modal
+    //     console.log('fail:', message);
+    // }
 };
 
 formEl.addEventListener('submit', formSubmitHandler);
@@ -84,7 +97,8 @@ async function searchInputHandler() {
 
     if (!value || whitespaceRegex.test(value)) {
         // display all playlists
-        thisUserPlaylists.forEach(element => {
+        thisUserUnsorted
+    .forEach(element => {
             const listEl = $('<li>').attr('class', 'my-0 hover:bg-stone-300 cursor-grab').attr('data-id', element._id);
     
             const firstParaEl = $('<p>').attr('class', 'font-medium').text(element.title);
@@ -101,8 +115,10 @@ async function searchInputHandler() {
     // make a regex from the current value
     const filterRegex = new RegExp('\\b' + value, 'i');
 
-    // create new array by filtering thisUserPlaylists
-    const filteredPlaylists = thisUserPlaylists.filter(element => {
+    // create new array by filtering thisUserUnsorted
+
+    const filteredPlaylists = thisUserUnsorted
+.filter(element => {
         const {title} = element;
         return filterRegex.test(title);
     });

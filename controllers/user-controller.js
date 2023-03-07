@@ -69,6 +69,39 @@ const userController = {
         }
     },
 
+    async getOneUserUnsorted(req, res) {
+        const searchTerm = req.params.id;
+
+        try {
+            const dbRes = await User.findOne({
+                _id: searchTerm
+            })
+            .select('folders')
+            .populate({
+                path: 'folders',
+                populate: {
+                    path: 'playlists',
+                    select: '_id title songs'
+                }
+            });
+
+            // user was not found
+            if (!dbRes) {
+                res.status(404).json({message: 'User not found.'});
+                return;
+            }
+
+            // folders[0] should always be 'Unsorted'
+            // might benefit from some error handling here later
+            const unsortedFolder = dbRes.folders[0];
+
+            res.status(200).json(unsortedFolder);
+        } catch (err) {
+            console.log(err);
+            res.statsu(500).json(err);
+        }
+    },
+
     async getThisUserId(req, res) {
         // if this function is called by someone not logged in, do nothing
         // else, there should be a user_id attached to the session

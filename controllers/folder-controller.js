@@ -64,9 +64,12 @@ const folderController = {
                 { _id: user_id },
                 { $push: { folders: _id }},
                 { new: true }
-            ).populate('folders');
+            ).select('-password');
 
-            res.status(200).json(userDbRes);
+            res.status(200).json({
+                folder: folderDbRes,
+                user: userDbRes
+            });
         } catch (err) {
             console.log(err);
 
