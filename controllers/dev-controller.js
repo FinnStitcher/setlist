@@ -1,4 +1,4 @@
-const {Playlist, User} = require('../models');
+const {Playlist, User, Folder} = require('../models');
 require('dotenv').config();
 
 // these functions ignore ownership, but you need to provide a valid access key in the headers
@@ -80,7 +80,7 @@ const devController = {
         });
     },
 
-    devDeleteUser(req, res) {
+    async devDeleteUser(req, res) {
         const {authorization} = req.headers;
         const isDev = checkDevAuth(authorization);
         
@@ -91,42 +91,44 @@ const devController = {
 
         const userId = req.params.id;
 
-        User.findOneAndDelete(
-            {_id: userId}
-        )
-        .then(async dbRes => {
-            // user was not found
-            if (!dbRes) {
+        // delete user
+        try {
+            const userDbRes = await User.findOneAndDelete({_id: userId});
+
+            if (!userDbRes) {
                 res.status(404).json({message: 'No user with that ID.'});
                 return;
             }
 
-            console.log(dbRes);
+            const {playlists, folders} = userDbRes;
 
-            // user was found
-            // delete playlists belonging to this user
-            const {username, playlists} = dbRes;
+            const playlistDbRes = await Playlist.deleteMany({_id: {
+                $in: [...playlists]
+            }});
 
-            const playlistDelRes = await Playlist.deleteMany(
-                {_id: {
-                    $in: [...playlists]
-                }}
-            );
-
-            return {username, playlistDelRes}
-        })
-        .then(data => {
-            if (!data.playlistDelRes) {
-                res.status(500).json({message: 'User was deleted, but there was an error deleting playlists.'})
-            return;
+            if (!playlistDbRes) {
+                res.status(404).json({message: 'User was deleted successfully, but there was an error deleting their playlists.'});
+                return;
             }
 
-            res.json({message: `User ${data.username} has been deleted.`});
-        })
-        .catch(err => {
+            const folderDbRes = await Folder.deleteMany({_id: {
+                $in: [...folders]
+            }});
+
+            if (!folderDbRes) {
+                res.status(404).json({message: 'User was deleted successfully, but there was an error deleting their folders.'});
+                return;
+            }
+
+            res.status(200).json({
+                userDbRes,
+                folderDbRes,
+                playlistDbRes
+            })
+        } catch (err) {
             console.log(err);
             res.status(500).json(err);
-        })
+        }
     },
 
     devDeletePlaylist(req, res) {

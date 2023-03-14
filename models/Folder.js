@@ -24,6 +24,10 @@ const FolderSchema = new Schema(
             type: String,
             ref: 'User',
             required: true
+        },
+        isUnsorted: {
+            type: Boolean,
+            default: false
         }
     }
 );
