@@ -133,7 +133,8 @@ const userController = {
             // create 'Unsorted' folder for this user
             const { _id: unsortedFolderId } = await Folder.create({
                 name: 'Unsorted',
-                username
+                username,
+                isUnsorted: true
             });
 
             const userDbRes = await User.create({

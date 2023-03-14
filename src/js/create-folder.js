@@ -27,8 +27,7 @@ async function formSubmitHandler(event) {
 
     // check that name is present
     if (!name) {
-        // TODO: Modal
-        console.log('need name');
+        displayModal('Your folder needs a name.');
         return;
     }
 
@@ -55,8 +54,7 @@ async function formSubmitHandler(event) {
     if (!response.ok) {
         const {message} = json;
 
-        // TODO: Modal
-        console.log('failure:', message);
+        displayModal(message);
 
         return;
     };
@@ -64,19 +62,34 @@ async function formSubmitHandler(event) {
     // remove these playlists from all other folders
     const {_id: newFolderId} = json.folder;
 
-    // if (response.ok) {
-    //     // TODO: Modal
-    //     console.log('success');
+    selectedPlaylistIds.forEach(async (element) => {
+        const updateResponse = await fetch(`/api/playlists/${element}/update-folders`, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                folderId: newFolderId
+            })
+        });
+        const updateJson = updateResponse.json();
 
-    //     setTimeout(() => {
-    //         window.location.assign('/folders');
-    //     }, 2000);
-    // } else {
-    //     const {message} = await response.json();
+        if (!updateResponse.ok) {
+            const {message} = updateJson;
 
-    //     // TODO: Modal
-    //     console.log('fail:', message);
-    // }
+            displayModal(message);
+
+            return;
+        }
+    });
+
+    // function is still running at this point, so no failures were met
+    displayModal('Your folder has been successfully created. Redirecting...');
+
+    setTimeout(() => {
+        window.location.assign('/folders');
+    }, 2000);
 };
 
 formEl.addEventListener('submit', formSubmitHandler);
@@ -168,4 +181,20 @@ Sortable.create(searchResultsContainerEl, {
 // END SORTABLE CODE
 
 // MODAL CODE
+const modalEl = document.querySelector('#modal');
+const modalCloseBtnEl = document.querySelector('#modal-close-btn');
+const modalTextEl = document.querySelector('#modal p');
+
+function displayModal(message) {
+    modalTextEl.textContent = message;
+    modalEl.showModal();
+};
+
+modalCloseBtn.addEventListener('click', () => {
+    modalEl.close();
+    
+    if (modalTextEl.includes('Success')) {
+        window.location.assign('/folders');
+    }
+});
 // END MODAL CODE

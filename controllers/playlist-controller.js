@@ -183,7 +183,7 @@ const playlistController = {
 
             if (!testFolderOwnershipRes) {
                 // make an update so it does
-                res.status(400).json({message: 'The desired folder doesn\'t actually contain this playlist. Process was aborted.'});
+                res.status(400).json({message: 'The desired folder doesn\'t contain this playlist. Process was aborted.'});
                 return;
             }
 

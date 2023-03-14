@@ -2,6 +2,7 @@
     <div class="border-b-2 border-stone-300 bg-stone-200  px-2 py-2 flex justify-between sm:justify-start fl-title">
         <h3>{{fl.name}}</h3>
 
+        {{#unless isUnsorted}}
         <a
             role="button"
             href="/edit-folder/{{fl._id}}"
@@ -14,6 +15,7 @@
             data-btn-type="del-fl-btn"
             class="ml-2 md:ml-4 inline-block"
         >Delete</button>
+        {{/unless}}
     </div>
 
     <div class="pl-3 py-2.5 space-y-3">
